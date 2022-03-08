@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  mongo:
+
+  gateway:
+
+  sandwich-service:
+
+  authentication:
+
+
+
+
