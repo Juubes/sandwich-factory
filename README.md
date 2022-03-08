@@ -10,19 +10,19 @@ The front is made with React and Tailwind.
 
 ## API gateway
 
-    Acts as a proxy for all services. Handles authentication, rate limiting, logging and firewalling API routes.
+Acts as a proxy for all services. Handles authentication, rate limiting, logging and firewalling API routes.
 
 ## Sandwich factory
 
-    Makes sandwiches and keeps track of what sandwiches are possible to make.
+Makes sandwiches and keeps track of what sandwiches are possible to make.
 
 ## Authentication
 
-    Keeps track of sessions and maintains and authenticates users.
+Keeps track of sessions and maintains and authenticates users.
 
 ## Database
 
-    Stores client data, orders, sandwiches and all other data from the services. Every service has access to only to its own data.
+Stores client data, orders, sandwiches and all other data from the services. Every service has access to only to its own data.
 
 # How does the system work?
 
