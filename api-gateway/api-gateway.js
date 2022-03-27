@@ -4,6 +4,8 @@ const proxy = require("http-proxy");
 
 const app = express();
 
+const PORT = 8001;
+
 const { ORDER_API_URL, AUTH_API_URL, RABBITMQ_URL } = process.env;
 
 const orderService = proxy.createProxyServer({
@@ -39,6 +41,6 @@ app.all("/user", (req, res) => {
   orderService.web(req, res);
 });
 
-https.createServer(app).listen(443, () => {
-  console.log("Listening on port 443");
+https.createServer(app).listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });

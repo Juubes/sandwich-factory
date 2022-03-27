@@ -2,6 +2,12 @@
 
 This is a website for ordering sandwiches. Everything has been dockerized to make the system platform independent.
 
+## Running
+
+> docker-compose up
+
+starts all the services and opens up ports for the web server and the API gateway.
+
 # Front-end
 
 The front-end architecture is made the following:
