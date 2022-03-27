@@ -1,0 +1,25 @@
+{
+  "name": "sandwich-factory",
+  "version": "1.0.0",
+  "description": "This is a website for ordering sandwiches. Everything has been dockerized to make the system platform independent.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodejs service.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juubes/sandwich-factory.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Juubes/sandwich-factory/issues"
+  },
+  "homepage": "https://github.com/Juubes/sandwich-factory#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "http-proxy": "^1.18.1",
+    "node-http-proxy": "^0.2.4"
+  }
+}

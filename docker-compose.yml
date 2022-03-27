@@ -1,13 +1,16 @@
 version: "3.9"
 services:
-  mongo:
-
   gateway:
+    build: "./api-gateway"
 
-  sandwich-service:
+    environment:
+      - ORDER_API_URL=https://localhost:3531/
+      - AUTH_API_URL=https://localhost:6363/
+      - RABBITMQ_URL=https://localhost:5672/
 
-  authentication:
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - 5672:5672
 
-
-
-
+    
