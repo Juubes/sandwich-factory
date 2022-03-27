@@ -4,7 +4,11 @@ This is a website for ordering sandwiches. Everything has been dockerized to mak
 
 # Front-end
 
-The front is made with React and Tailwind.
+The front-end architecture is made the following:
+
+- **React** for the framework
+- **NextJS** for compiling and optimisation
+- **Tailwind** for styling
 
 # Architecture and services
 
@@ -12,34 +16,26 @@ The front is made with React and Tailwind.
 
 Acts as a proxy for all services. Handles authentication, rate limiting, logging and firewalling API routes.
 
-## Sandwich factory
+In this project the API gateway also handles static file serving. Usually this would be the responsibility of the CDN.
 
-Makes sandwiches and keeps track of what sandwiches are possible to make.
+## Sandwich factory service
 
-## Authentication
-
-Keeps track of sessions and maintains and authenticates users.
+Makes sandwiches. The service might use the /sandwich API to get information about the sandwich types. This service is not scalable so there's a queue infront of it, implemented with **RabbitMQ**. 
 
 ## Database
 
-Stores client data, orders, sandwiches and all other data from the services. Every service has access to only to its own data.
+Stores client data, orders, sandwiches and all other data from the services. Every service has access to only to its own data. The database is implemented with MongoDB.
 
 # How does the system work?
 
 ## Overview
 
-Clients can either authenticate, browser all sandwiches or make an order. All of these actions have their own service. There's an API gateway infront of every service.
-
 ## Authentication
-
-Clients can authenticate with the authentication service. The service handles the session at the gateway-level. The microservices don't do their own authentication; it's better to have it all in the same place.
 
 ## Ordering
 
-Clients can send orders to the Sandwich factory service trough the /order API route. The client gets an immediate response that the order has started processing. The client and the sandwich factory share a websocket so the client gets a push notification when the sandwich is ready.
-
 # Known weak links
 
-The API gateway is the bottleneck and a one-point-of-failure. Normally I'd trust this responsibility to Google's or Amazon's platform and their products but for the moment this will do.
+# About RabbitMQ
 
-A lot of the microservices could have been replaced with serverless functions for more abstraction and efficiency.
+RabbitMQ is needed only for the queueing the orders. Piping everything trough it would be overhead -- especially since most of the services can be assumed to scale with the usage. Other APIs don't need the queue function before the service; they are assumed to always have enough capacity.
