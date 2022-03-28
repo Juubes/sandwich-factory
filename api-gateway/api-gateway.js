@@ -7,22 +7,22 @@ const app = express();
 
 const PORT = 8001;
 
-const orderService = proxy.createProxyServer({
+const orderAPI = proxy.createProxyServer({
   secure: true,
   changeOrigin: true,
-  target: ORDER_API_URL,
+  target: "http://localhost:3531",
 });
 
-const authService = proxy.createProxyServer({
+const authAPI = proxy.createProxyServer({
   secure: true,
   changeOrigin: true,
-  target: AUTH_API_URL,
+  target: "http://localhost:3531",
 });
 
-const rabbitmqService = proxy.createProxyServer({
+const sandwichAPI = proxy.createProxyServer({
   secure: true,
   changeOrigin: true,
-  target: RABBITMQ_URL,
+  target: "http://localhost:7452", 
 });
 
 app.get("/", (req, res) => {
@@ -32,17 +32,17 @@ app.get("/", (req, res) => {
 
 app.all("/order", (req, res) => {
   // TODO: Auth, ratelimiting
-  orderService.web(req, res);
-});
-
-app.all("/sandwich", (req, res) => {
-  // TODO: Auth, ratelimiting
-  sandwichService.web(req, res);
+  orderAPI.web(req, res);
 });
 
 app.all("/user", (req, res) => {
   // TODO: Auth, ratelimiting
-  authService.web(req, res);
+  authAPI.web(req, res);
+});
+
+app.all("/sandwich", (req, res) => {
+  // TODO: Auth, ratelimiting
+  sandwichAPI.web(req, res);
 });
 
 app.listen(PORT, () => {

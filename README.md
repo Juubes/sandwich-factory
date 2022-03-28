@@ -18,11 +18,13 @@ The front-end architecture is made the following:
 
 # Architecture and services
 
+## Static file serving
+
+The website is hosted on port 3000 on **NGINX** in a container.
+
 ## API gateway
 
 Acts as a proxy for all services. Handles authentication, rate limiting, logging and firewalling API routes.
-
-In this project the API gateway also handles static file serving. Usually this would be the responsibility of the CDN.
 
 ## Sandwich factory service
 
