@@ -7,8 +7,6 @@ const app = express();
 
 const PORT = 8001;
 
-const { ORDER_API_URL, AUTH_API_URL, RABBITMQ_URL } = process.env;
-
 const orderService = proxy.createProxyServer({
   secure: true,
   changeOrigin: true,
@@ -28,7 +26,7 @@ const rabbitmqService = proxy.createProxyServer({
 });
 
 app.get("/", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.json({ status: "OK", code: "200" });
 });
 
