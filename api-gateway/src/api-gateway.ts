@@ -51,6 +51,11 @@ const sandwichAPI = proxy.createProxyServer({
   target: "http://sandwich-api:7452",
 });
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  next();
+});
+
 // Authorization checks. Good requests return.
 app.use((req, res, next) => {
   // Normalize URL
@@ -90,7 +95,6 @@ app.use((req, res, next) => {
 
 // Health check -- redundant
 app.get("/", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.json({ status: "OK", code: "200" });
 });
 
