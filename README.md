@@ -6,7 +6,7 @@ This is a website for ordering sandwiches. Everything has been dockerized to mak
 
 > docker-compose up
 
-starts all the services and opens up ports for the web server and the API gateway.
+starts all the services and opens up ports `3000` and `8001` for the web server and the API gateway.
 
 # Front-end
 

@@ -38,7 +38,7 @@ app.all("/sandwich", (req, res) => {
 
 app.all("/user", (req, res) => {
   // TODO: Auth, ratelimiting
-  orderService.web(req, res);
+  authService.web(req, res);
 });
 
 https.createServer(app).listen(PORT, () => {

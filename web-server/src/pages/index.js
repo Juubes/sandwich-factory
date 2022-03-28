@@ -1,6 +1,11 @@
 import Head from "next/head";
+import { API_GATEWAY_URL } from "../services/environment";
 
-export default function Home() {
+export default async function Home() {
+  const res = await fetch(API_GATEWAY_URL + "/order");
+
+  console.log("Response: " + res.json());
+
   return (
     <div>
       <Head>
@@ -9,7 +14,6 @@ export default function Home() {
           name="description"
           content="This is a website for ordering sandwiches."
         />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <header></header>
       <main></main>

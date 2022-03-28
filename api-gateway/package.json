@@ -2,9 +2,8 @@
   "name": "sandwich-factory",
   "version": "1.0.0",
   "description": "This is a website for ordering sandwiches. Everything has been dockerized to make the system platform independent.",
-  "main": "index.js",
   "scripts": {
-    "start": "nodejs service.js"
+    "start": "nodejs api-gateway.js"
   },
   "repository": {
     "type": "git",
