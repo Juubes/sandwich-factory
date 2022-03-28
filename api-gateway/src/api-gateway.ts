@@ -1,6 +1,8 @@
 import express from "express";
+import axios from "axios";
 import proxy from "http-proxy";
-import * as auth from "./auth";
+import cookies from "cookie-parser";
+import { activateProxy, parseSessionToken } from "./utils";
 
 const app = express();
 const PORT = 8001;
@@ -50,6 +52,7 @@ const sandwichAPI = proxy.createProxyServer({
   changeOrigin: true,
   target: "http://sandwich-api:7452",
 });
+app.use(cookies());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -57,7 +60,7 @@ app.use((req, res, next) => {
 });
 
 // Authorization checks. Good requests return.
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   // Normalize URL
   req.url = req.url.toLowerCase();
   req.method = req.method.toUpperCase();
@@ -76,17 +79,43 @@ app.use((req, res, next) => {
     return next();
   }
 
-  // If the route is found, continue
-  if (
-    USER_ROUTES.some((route) => {
-      if (route.method !== req.method) return false;
-      if (!req.url.match(route.pathMatch)) return false;
-      return true;
-    })
-  ) {
+  // Check if route is whitelisted
+  const routeFound = USER_ROUTES.some((route) => {
+    if (route.method !== req.method) return false;
+    if (!req.url.match(route.pathMatch)) return false;
+    return true;
+  });
+
+  if (routeFound) {
     // Check auth
-    const sessionToken = auth.parseSessionToken(req.cookies);
-    if (auth.checkAuth(sessionToken)) return next();
+
+    const sessionToken = parseSessionToken(req.cookies);
+
+    if (!sessionToken) {
+      res.sendStatus(403);
+      return;
+    }
+
+    // Fetch username with the session token
+    try {
+      const response = await axios.get(
+        "http://auth-api:6363/checkSession/" + sessionToken
+      );
+      const data = await response.data;
+
+      console.log(data);
+    } catch (e) {
+      res.sendStatus(500);
+      return;
+    }
+    // Wrong password
+    // if (!data.username) {
+    //   req.headers.UserID = data.username;
+    //   return next();
+    // }
+
+    res.sendStatus(403);
+    return;
   }
 
   res.sendStatus(403);
@@ -98,36 +127,9 @@ app.get("/", (req, res) => {
   res.json({ status: "OK", code: "200" });
 });
 
-app.all("/order/*", (req, res) => {
-  req.url = req.url.substring(6);
-
-  orderAPI.web(req, res, {}, (e) => {
-    res.sendStatus(500);
-    console.log(
-      "Error handling " + req.method + " " + req.url + ": " + e.message
-    );
-  });
-});
-
-app.all("/user/*", (req, res) => {
-  req.url = req.url.substring(6);
-  authAPI.web(req, res, {}, (e) => {
-    res.sendStatus(500);
-    console.log(
-      "Error handling " + req.method + " " + req.url + ": " + e.message
-    );
-  });
-});
-
-app.all("/sandwich/*", (req, res) => {
-  req.url = req.url.substring(10);
-  sandwichAPI.web(req, res, {}, (e) => {
-    res.sendStatus(500);
-    console.log(
-      "Error handling " + req.method + " " + req.url + ": " + e.message
-    );
-  });
-});
+activateProxy(app, "/user/*", authAPI);
+activateProxy(app, "/order/*", orderAPI);
+activateProxy(app, "/sandwich/*", sandwichAPI);
 
 // The catch-all
 app.all("*", (req, res) => {

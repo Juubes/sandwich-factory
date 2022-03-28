@@ -52,6 +52,8 @@ Clients can either authenticate, browser all sandwiches or make an order. All of
 
 Clients can authenticate with the authentication API. The system handles session at the reverse-proxy. The microservices don't do their own authentication.
 
+The authentication is done on the proxy and the usernames passed on headers to backend. There's probably a more elegant solution to this.
+
 ## Ordering
 
 Clients can send orders to the Sandwich factory service trough the /order API route. The client gets an immediate response that the order has started processing. The client and the sandwich factory share a websocket so the client gets a push notification when the sandwich is ready.
