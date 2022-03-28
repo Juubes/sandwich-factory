@@ -3,22 +3,21 @@ const express = require("express");
 const app = express();
 
 // Mapped from /user on proxy
-app.post("/", (req, res) => {});
-
-app.post("/login", (req, res) => {});
-
-app.post("/logout", (req, res) => {});
-
-app.get("/:username", (req, res) => {
-  const username = req.params.username;
+app.get("/", (req, res) => {
+  console.log("Hello")
+  res.sendStatus(200);
 });
 
-app.put("/:username", (req, res) => {
-  const username = req.params.username;
+app.post("/login", (req, res) => {
+  res.sendStatus(200);
 });
 
-app.delete("/:username", (req, res) => {
-  const username = req.params.username;
+app.post("/register", (req, res) => {
+  res.sendStatus(200);
+});
+
+app.post("/logout", (req, res) => {
+  res.sendStatus(200);
 });
 
 app.listen(6363, () => {

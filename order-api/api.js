@@ -3,7 +3,9 @@ const express = require("express");
 const app = express();
 
 // Mapped from /order on proxy
-app.get("/", (req, res) => {});
+app.get("/", (req, res) => {
+  res.json({ message: "Hello from order API" });
+});
 
 app.post("/", (req, res) => {});
 
