@@ -1,10 +1,14 @@
 import Head from "next/head";
-import { API_GATEWAY_URL } from "../services/environment";
+import { useEffect } from "react";
 
-export default async function Home() {
-  const res = await fetch(API_GATEWAY_URL + "/order");
+const API_GATEWAY_URL = "http://localhost.local.gd:8001/";
 
-  console.log("Response: " + res.json());
+export default function Home() {
+  console.log(`Fetching '${API_GATEWAY_URL}'`);
+
+  useEffect(() => {
+    fetch(API_GATEWAY_URL).then((res) => console.log(res.status));
+  }, []);
 
   return (
     <div>

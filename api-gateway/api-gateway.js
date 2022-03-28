@@ -1,6 +1,7 @@
 const https = require("https");
 const express = require("express");
 const proxy = require("http-proxy");
+const fs = require("fs");
 
 const app = express();
 
@@ -26,6 +27,11 @@ const rabbitmqService = proxy.createProxyServer({
   target: RABBITMQ_URL,
 });
 
+app.get("/", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.json({ status: "OK", code: "200" });
+});
+
 app.all("/order", (req, res) => {
   // TODO: Auth, ratelimiting
   orderService.web(req, res);
@@ -41,6 +47,6 @@ app.all("/user", (req, res) => {
   authService.web(req, res);
 });
 
-https.createServer(app).listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });

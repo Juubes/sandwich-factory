@@ -54,11 +54,17 @@ Clients can authenticate with the authentication API. The system handles session
 
 Clients can send orders to the Sandwich factory service trough the /order API route. The client gets an immediate response that the order has started processing. The client and the sandwich factory share a websocket so the client gets a push notification when the sandwich is ready.
 
-# Known weak links
+# Known problems
 
 The API gateway is the bottleneck and a one-point-of-failure. Normally I'd trust this responsibility for a more robust platform but for the moment this will do.
 
 A lot of the microservices could have been replaced with serverless functions for more abstraction and efficiency.
+
+There's no SSL certificates for anything. The system works on localhost for testing purposes.
+
+The API endpoints are hardcoded.
+
+The localhost URL has been replaced with `local.gd`. It's a DNS service that maps to localhost.
 
 # About RabbitMQ
 

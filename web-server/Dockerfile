@@ -1,5 +1,9 @@
-FROM node:latest
+FROM node as build
 COPY . .
 RUN yarn build
-ENTRYPOINT [ "yarn" , "start" ]
-# TODO Optimisation for a better web server -- multistage docker building?
+RUN npx next export
+
+
+FROM nginx
+COPY --from=build ./out /usr/share/nginx/html
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf

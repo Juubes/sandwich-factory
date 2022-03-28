@@ -3,19 +3,17 @@ services:
   web-server:
     build: "./web-server"
     ports:
-      - 3000:3000
-    environment:
-      - API_GATEWAY_URL=https://localhost:8001/
+      - 3000:80
 
   api-gateway:
     build: "./api-gateway"
     ports:
       - 8001:8001
     environment:
-      - ORDER_API_URL=https://localhost:3531/
-      - SANDWICH_API=https://localhost:9055/
-      - AUTH_API_URL=https://localhost:6363/
-      - RABBITMQ_URL=https://localhost:5672/
+      - ORDER_API_URL=http://127.0.0.1:3531/
+      - SANDWICH_API=http://127.0.0.1:9055/
+      - AUTH_API_URL=http://127.0.0.1:6363/
+      - RABBITMQ_URL=http://127.0.0.1:5672/
 
   rabbitmq:
     image: rabbitmq
