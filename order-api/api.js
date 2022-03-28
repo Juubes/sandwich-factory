@@ -7,10 +7,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Hello from order API" });
 });
 
-app.post("/", (req, res) => {});
-
-app.get("/:id", (req, res) => {
-  const id = req.params.id;
+app.post("/", (req, res) => {
+  res.sendStatus(500);
 });
 
 app.listen(3531, () => {

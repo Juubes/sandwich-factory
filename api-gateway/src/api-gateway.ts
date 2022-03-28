@@ -28,6 +28,12 @@ const USER_ROUTES = [
 
   // Delete own user
   { method: "DELETE", pathMatch: "^/user/$" },
+
+  // Get own orders
+  { method: "GET", pathMatch: "^/order/$" },
+
+  // Create order
+  { method: "POST", pathMatch: "^/order/$" },
 ];
 
 const orderAPI = proxy.createProxyServer({
