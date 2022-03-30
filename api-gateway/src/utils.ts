@@ -14,17 +14,6 @@ export function activateProxy(app: Express, route: string, proxy: proxy) {
 
     req.url = req.url.substring(redundantPathLength);
 
-    console.log("Sending to " + req.url);
-
     proxy.web(req, res, {}, errorHandler);
   });
-}
-
-export function parseSessionToken(cookie: any) {
-  if (!cookie) return null;
-
-  const { sessionToken } = cookie;
-
-  if (!sessionToken) return null;
-  return sessionToken;
 }

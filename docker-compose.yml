@@ -18,6 +18,6 @@ services:
   sandwich-service:
     build: "./sandwich-service"
 
-  rabbitmq:
-    image: rabbitmq
+  # rabbitmq:
+    # image: rabbitmq
 

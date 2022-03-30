@@ -2,7 +2,7 @@ import express from "express";
 import axios from "axios";
 import proxy from "http-proxy";
 import cookies from "cookie-parser";
-import { activateProxy, parseSessionToken } from "./utils";
+import { activateProxy } from "./utils";
 
 const app = express();
 const PORT = 8001;
@@ -86,40 +86,42 @@ app.use(async (req, res, next) => {
     return true;
   });
 
-  if (routeFound) {
-    // Check auth
+  if (!routeFound) {
+    res.sendStatus(403);
+    console.log("Request blocked for " + req.method + " " + req.url);
+    return;
+  }
 
-    const sessionToken = parseSessionToken(req.cookies);
-
-    if (!sessionToken) {
-      res.sendStatus(403);
-      return;
-    }
-
-    // Fetch username with the session token
-    try {
-      const response = await axios.get(
-        "http://auth-api:6363/checkSession/" + sessionToken
-      );
-      const data = await response.data;
-
-      console.log(data);
-    } catch (e) {
-      res.sendStatus(500);
-      return;
-    }
-    // Wrong password
-    // if (!data.username) {
-    //   req.headers.UserID = data.username;
-    //   return next();
-    // }
-
+  // Check auth
+  const token = req.cookies.token;
+  if (!token) {
     res.sendStatus(403);
     return;
   }
 
-  res.sendStatus(403);
-  console.log("Request blocked for " + req.method + " " + req.url);
+  // Authenticate user with the session token
+  let username;
+  try {
+    // Request to Authentication service
+    const response = await axios.post("http://auth-api:6363/checkSession/", {
+      token,
+    });
+    const data = await response.data;
+    username = data?.username;
+  } catch (e) {
+    res.sendStatus(500);
+    console.log("Session fetching failed: " + e);
+    return;
+  }
+
+  // Wrong password
+  if (!username) {
+    res.status(403).send("Invalid session token");
+  } else {
+    console.log("User from cookie identified: " + username);
+    next();
+  }
+  return;
 });
 
 // Health check -- redundant

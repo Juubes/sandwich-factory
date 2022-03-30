@@ -4,14 +4,6 @@ let userDatabase: { user: string; passwordHash: string; salt: string }[] = [];
 
 let sessionStore: Map<string, { user: string; token: string }> = new Map();
 
-export function checkAuth(sessionToken: string): boolean {
-  return !!getUserIdFromSession(sessionToken);
-}
-
-export function parseSessionToken(cookie: string): string {
-  return "A578B98989CFD90";
-}
-
 export function register(user: string, password: string): string | null {
   // Test if user is already registered
   // Would be easier with indexes and binarysearch
@@ -45,8 +37,6 @@ function hashPasswordWithSalt(password: string, salt: string): string {
 
 /**@returns a new session token if user has logged in */
 export function login(user: string, password: string) {
-  // Hash password with salt
-
   for (const dbEntry of userDatabase) {
     if (dbEntry.user === user) {
       const salt = dbEntry.salt;
@@ -57,8 +47,9 @@ export function login(user: string, password: string) {
         return null;
       }
 
-      // Random token as hex
-      return generateTokenForUser(user);
+      const token = generateTokenForUser(user);
+      sessionStore.set(user, { user, token });
+      return token;
     }
   }
 
@@ -66,7 +57,7 @@ export function login(user: string, password: string) {
   return null;
 }
 function generateTokenForUser(user: string): string {
-  let token = Math.floor(Math.random() * 1e100).toString(16);
+  let token = crypto.randomBytes(64).toString("base64");
   sessionStore.set(user, { token, user });
   return token;
 }
@@ -74,9 +65,13 @@ export function logout(username: string): boolean {
   return sessionStore.delete(username);
 }
 
-export function getUserIdFromSession(sessionToken: string): string {
-  for (let user in sessionStore.keys()) {
-    if (sessionStore.get(user)!.token === sessionToken) return user;
+export function getUserIdFromSession(sessionToken: string): string | null {
+  const iter = sessionStore.keys();
+  let key;
+
+  // Find the token, return user
+  while (((key = iter.next()), !key.done)) {
+    if (sessionStore.get(key.value)!.token === sessionToken) return key.value;
   }
-  throw Error("Couldn't find user for token: " + sessionToken);
+  return null;
 }
