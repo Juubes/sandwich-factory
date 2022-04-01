@@ -34,10 +34,6 @@ Makes sandwiches. The service might use the /sandwich API to get information abo
 
 Registers and logs users in. The API gateway handles session persistence.
 
-## Sandwich factory service
-
-Makes sandwiches. The service might use the /sandwich API to get information about the sandwich types. This service is not scalable so there's a queue infront of it, implemented with **RabbitMQ**.
-
 ## Database
 
 Stores client data, orders, sandwiches and all other data from the services. Every service has access to only to its own data. The database is implemented with MongoDB.

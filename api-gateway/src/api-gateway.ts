@@ -3,6 +3,7 @@ import axios from "axios";
 import proxy from "http-proxy";
 import cookies from "cookie-parser";
 import { activateProxy } from "./utils";
+import ws from "ws";
 
 const app = express();
 const PORT = 8001;
@@ -56,6 +57,7 @@ app.use(cookies());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.setHeader("Content-Security-Policy", "connect-src default-src")
   next();
 });
 
@@ -116,7 +118,7 @@ app.use(async (req, res, next) => {
 
   // Wrong password
   if (!username) {
-    res.status(403).send("Invalid session token");
+    res.sendStatus(401);
   } else {
     console.log("User from cookie identified: " + username);
     next();
@@ -133,13 +135,21 @@ activateProxy(app, "/user/*", authAPI);
 activateProxy(app, "/order/*", orderAPI);
 activateProxy(app, "/sandwich/*", sandwichAPI);
 
+let test = proxy.createServer({ ws: true });
+
 // The catch-all
 app.all("*", (req, res) => {
-  res.sendStatus(500);
+  res.sendStatus(501);
   console.error("User requested for a known route and failed!");
   console.error("Failed: " + req.method + " " + req.url);
 });
 
-app.listen(PORT, () => {
+let httpServer = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
+});
+
+let wsServer = new ws.Server({ server: httpServer });
+wsServer.on("connection", (c) => {
+  c.send(JSON.stringify(c));
+  console.log("Hello")
 });

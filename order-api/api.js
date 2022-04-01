@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  res.sendStatus(500);
+  res.sendStatus(501);
 });
 
 app.listen(3531, () => {

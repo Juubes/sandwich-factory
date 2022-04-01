@@ -1,15 +1,10 @@
+import React from "react";
 import Head from "next/head";
-import { useEffect } from "react";
+import Main from "./Main";
 
 const API_GATEWAY_URL = "http://localhost.local.gd:8001/";
 
 export default function Home() {
-  console.log(`Fetching '${API_GATEWAY_URL}'`);
-
-  useEffect(() => {
-    fetch(API_GATEWAY_URL).then((res) => console.log(res.status));
-  }, []);
-
   return (
     <div>
       <Head>
@@ -20,7 +15,7 @@ export default function Home() {
         />
       </Head>
       <header></header>
-      <main></main>
+      <Main />
       <footer></footer>
     </div>
   );

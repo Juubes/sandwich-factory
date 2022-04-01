@@ -10,11 +10,6 @@ app.use(multer().none());
 // Bodyparsers for JSON
 app.use("/checkSession", express.json());
 
-app.all("*", (req, res, next) => {
-  console.log(`INFO: ${req.method} ${req.url}`);
-
-  next();
-});
 // Mapped from /user on proxy
 app.get("/", (req, res) => {
   const username: string = req.get("UserID")!;
