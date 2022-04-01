@@ -5,20 +5,18 @@ function Main() {
   return (
     <main className="yellow">
       <SessionContext>
-        <h1 className="">Content</h1>
-        <h2 className="">Content</h2>
-        <p className="">
-          Ex eu aute in proident magna culpa minim nulla aliquip ea.
-          Exercitation tempor aliquip culpa aliqua pariatur eiusmod aute. Aliqua
-          culpa culpa est voluptate quis ullamco tempor aute aliquip occaecat
-          commodo eu elit sit. Mollit anim officia tempor ut ex aute anim ad ex
-          non enim do. Labore culpa magna irure dolor commodo sunt do irure.
-          Elit proident non ea Lorem commodo anim non amet irure velit eiusmod
-          exercitation amet. Eiusmod non mollit reprehenderit irure veniam
-          exercitation in. Non nisi consectetur adipisicing nisi ad laboris
-          pariatur amet eiusmod cupidatat. Deserunt ipsum occaecat consequat
-          eiusmod sint eiusmod est nisi enim consectetur ipsum amet.
-        </p>
+        <div className="mx-auto max-w-7xl bg-[#CFA200] p-10 mt-10 ">
+          <h1>Welcome to the SandwichFactory website</h1>
+          <h2>How to make an order?</h2>
+          <p>1. Login or register</p>
+          <p>2. Create an order</p>
+          <p>3. Wait for your sandwich.</p>
+          <p>4. You will get a notification when it's ready!</p>
+        </div>
+        <div className="mx-auto max-w-7xl bg-[#CFA200] p-10 mt-10 flex gap-5">
+          <button>Register</button>
+          <button>Login</button>
+        </div>
       </SessionContext>
     </main>
   );

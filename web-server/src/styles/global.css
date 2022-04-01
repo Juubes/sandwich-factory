@@ -7,14 +7,28 @@ html {
   font-family: "Merriweather";
   font-family: "Modak", cursive;
   font-family: "Zen Antique Soft", serif;
+
+  @apply bg-[#6c8cff];
 }
 
 h1 {
-  @apply text-yellow-400 text-7xl font-bold;
+  @apply text-white text-5xl font-bold;
+  @apply py-5;
 }
+
 h2 {
-  @apply text-yellow-400 text-6xl font-bold;
+  @apply text-white text-4xl font-bold;
+  @apply py-4;
 }
+
 p {
-  @apply text-yellow-400 text-5xl font-normal;
+  @apply text-white text-3xl font-normal;
+  @apply py-2;
+}
+
+button {
+  @apply text-white text-3xl font-normal;
+  @apply p-3;
+  @apply rounded-lg;
+  @apply bg-black;
 }

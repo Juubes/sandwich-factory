@@ -4,11 +4,11 @@ import Main from "./Main";
 
 const API_GATEWAY_URL = "http://localhost.local.gd:8001/";
 
-export default function Home() {
+export default function Index() {
   return (
     <div>
       <Head>
-        <title>Sandwich factory by Juho Tapio</title>
+        <title>SandwichFactory by Juho Tapio</title>
         <meta
           name="description"
           content="This is a website for ordering sandwiches."
