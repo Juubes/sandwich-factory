@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+html {
+  font-family: "Merriweather";
+  font-family: "Modak", cursive;
+  font-family: "Zen Antique Soft", serif;
+}
+
+h1 {
+  @apply text-yellow-400 text-7xl font-bold;
+}
+h2 {
+  @apply text-yellow-400 text-6xl font-bold;
+}
+p {
+  @apply text-yellow-400 text-5xl font-normal;
+}
