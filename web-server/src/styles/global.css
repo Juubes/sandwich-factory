@@ -8,7 +8,7 @@ html {
   font-family: "Modak", cursive;
   font-family: "Zen Antique Soft", serif;
 
-  @apply bg-[#6c8cff];
+  @apply bg-blue-800;
 }
 
 h1 {
@@ -21,14 +21,30 @@ h2 {
   @apply py-4;
 }
 
-p {
+p,
+li {
   @apply text-white text-3xl font-normal;
   @apply py-2;
+}
+
+label {
+  @apply text-white;
+  @apply text-xl;
+  @apply font-bold;
+}
+
+select {
+  @apply bg-yellow-200 p-1 font-bold;
 }
 
 button {
   @apply text-white text-3xl font-normal;
   @apply p-3;
   @apply rounded-lg;
-  @apply bg-black;
+  @apply bg-blue-800;
+  @apply shadow-xl;
+}
+
+li {
+  @apply list-disc list-inside text-white font-bold;
 }

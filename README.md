@@ -1,6 +1,6 @@
 # Introduction
 
-This is a website for ordering sandwiches. Everything has been dockerized to make the system platform independent.
+This is a website and a service for ordering sandwiches. Everything has been dockerized to make the system platform independent.
 
 ## Running
 

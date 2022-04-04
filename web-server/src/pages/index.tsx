@@ -1,8 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import Main from "./Main";
-
-const API_GATEWAY_URL = "http://localhost.local.gd:8001/";
+import Main from "../components/Main";
 
 export default function Index() {
   return (

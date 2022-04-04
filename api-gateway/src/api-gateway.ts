@@ -53,6 +53,7 @@ const sandwichAPI = proxy.createProxyServer({
   changeOrigin: true,
   target: "http://sandwich-api:7452",
 });
+
 app.use(cookies());
 
 app.use((req, res, next) => {
@@ -151,5 +152,5 @@ let httpServer = app.listen(PORT, () => {
 let wsServer = new ws.Server({ server: httpServer });
 wsServer.on("connection", (c) => {
   c.send(JSON.stringify(c));
-  console.log("Hello")
+  console.log("Hello");
 });

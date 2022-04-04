@@ -17,7 +17,7 @@ export function useSession() {
 const sessionContext = React.createContext<{
   session: User | null;
   updateSession: Function;
-} | null>(null);
+}>({ session: null, updateSession: () => {} });
 
 const SessionContext: FC = ({ children }) => {
   let [session, setSession] = React.useState(null);
