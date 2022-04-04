@@ -54,7 +54,7 @@ function OrderForm() {
         }
 
         setOrderingStatus("order failed");
-        console.log("Ordering failed with status code: " + res.status);
+        console.error("Ordering failed with status code: " + res.status);
       })
       .catch((ex) => {
         setOrderingStatus("order failed");
@@ -74,7 +74,7 @@ function OrderForm() {
         setSandwiches(data);
       })
       .catch((ex) => {
-        console.log(ex);
+        console.error(ex);
         setError("Failed to fetch sandwich listings.");
       });
   }, []);
@@ -86,30 +86,37 @@ function OrderForm() {
     return <p>Loading...</p>;
   }
 
+  const SandwichButton = (sandwich: Sandwich) => {
+    let color =
+      sandwich.id === selectedSandwich ? "bg-green-700 hover:bg-green-600" : "";
+    return (
+      <button
+        onClick={(e) => {
+          setSelectedBread(sandwich.id);
+        }}
+        className={color}
+      >
+        {sandwich.name}
+      </button>
+    );
+  };
+
   return (
     <div>
-      <form>
-        <div className="flex flex-col">
-          <label>Select a bread</label>
-          <select
-            id="bread-id"
-            value={selectedSandwich!}
-            defaultValue={1}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setSelectedBread(Number.parseInt(e.target.value));
-            }}
-            name="cars"
-          >
-            {sandwiches.length > 0 &&
-              sandwiches.map((sandwich) => {
-                return <option value={sandwich.id}>{sandwich.name}</option>;
-              })}
-          </select>
-        </div>
-      </form>
+      <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 pb-10 my-10 shadow-lg">
+        <h2>Select a bread</h2>
 
-      {selectedSandwich && <WhatsInsideSection />}
+        <div className="flex gap-5">
+          {sandwiches.map((sandwich) => (
+            <SandwichButton {...sandwich} />
+          ))}
+        </div>
+      </div>
+      {selectedSandwich && (
+        <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 pb-10 my-10 shadow-lg">
+          <WhatsInsideSection />
+        </div>
+      )}
     </div>
   );
 }

@@ -26,11 +26,12 @@ function Main() {
 const LoggedInView = () => {
   const session = useSession();
   return (
-    <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 pb-10 my-10 shadow-lg">
-      <h2>Logged in as {session.session?.username}.</h2>
-
+    <>
+      <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 my-10 shadow-lg">
+        <h2>Logged in as {session.session?.username}.</h2>
+      </div>
       <OrderForm />
-    </div>
+    </>
   );
 };
 
