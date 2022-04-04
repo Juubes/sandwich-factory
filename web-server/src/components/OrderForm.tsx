@@ -2,19 +2,43 @@ import * as React from "react";
 import { useState } from "react";
 
 type OrderStatus = "default" | "sending order" | "order sent" | "order failed";
+type Sandwich = { id: number; name: string; breadType: string; toppings: [] };
 
 function OrderForm() {
-  const [sandwiches, setSandwiches] = useState<
-    {
-      id: number;
-      name: string;
-      breadType: string;
-      toppings: [];
-    }[]
-  >([]);
+  const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
   const [orderStatus, setOrderingStatus] = useState<OrderStatus>("default");
   const [error, setError] = useState<string>();
-  const [selectedSandwich, setSelectedBread] = useState<number>(1);
+  const [selectedSandwich, setSelectedBread] = useState<number | null>();
+
+  function WhatsInsideSection() {
+    return (
+      <>
+        <div>
+          <h2>What's inside?</h2>
+
+          <ul>
+            {
+              // Toppings to list
+              sandwiches
+                .find((sandwich) => sandwich.id === selectedSandwich)
+                ?.toppings.map((topping) => (
+                  <li>{topping}</li>
+                ))
+            }
+          </ul>
+        </div>
+        <button
+          className="mt-5 w-full"
+          onClick={() => {
+            if (orderStatus === "default" && selectedSandwich)
+              orderSandwich(selectedSandwich);
+          }}
+        >
+          {getOrderButtonText(orderStatus)}
+        </button>
+      </>
+    );
+  }
 
   function orderSandwich(sandwichId: number) {
     setOrderingStatus("sending order");
@@ -30,7 +54,7 @@ function OrderForm() {
         }
 
         setOrderingStatus("order failed");
-        console.log("Ordering failed with status code: " + res.status)
+        console.log("Ordering failed with status code: " + res.status);
       })
       .catch((ex) => {
         setOrderingStatus("order failed");
@@ -69,14 +93,13 @@ function OrderForm() {
           <label>Select a bread</label>
           <select
             id="bread-id"
-            value={selectedSandwich}
+            value={selectedSandwich!}
             defaultValue={1}
             onChange={(e) => {
               console.log(e.target.value);
               setSelectedBread(Number.parseInt(e.target.value));
             }}
             name="cars"
-            className=""
           >
             {sandwiches.length > 0 &&
               sandwiches.map((sandwich) => {
@@ -86,28 +109,7 @@ function OrderForm() {
         </div>
       </form>
 
-      <div>
-        <h2>What's inside?</h2>
-
-        <ul>
-          {
-            // Toppings to list
-            sandwiches
-              .find((sandwich) => sandwich.id === selectedSandwich)
-              ?.toppings.map((topping) => (
-                <li>{topping}</li>
-              ))
-          }
-        </ul>
-      </div>
-      <button
-        className="mt-5 w-full"
-        onClick={() => {
-          if (orderStatus === "default") orderSandwich(selectedSandwich);
-        }}
-      >
-        {getOrderButtonText(orderStatus)}
-      </button>
+      {selectedSandwich && <WhatsInsideSection />}
     </div>
   );
 }
