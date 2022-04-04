@@ -25,6 +25,8 @@ starts all the services and opens up ports `3000` and `8001` for the web server 
 
 # Architecture and services
 
+![](./resources/architecture.png)
+
 ## Static file serving
 
 The website is hosted on port 3000 on **NGINX** in a container. Please use a CDN for a real project 😩
