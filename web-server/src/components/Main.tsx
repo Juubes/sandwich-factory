@@ -1,6 +1,7 @@
 import * as React from "react";
 import SessionContext, { useSession } from "../auth/AuthContext";
 import OrderForm from "./OrderForm";
+import Section from "./Section";
 
 function Main() {
   const session = useSession();
@@ -27,9 +28,9 @@ const LoggedInView = () => {
   const session = useSession();
   return (
     <>
-      <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 my-10 shadow-lg">
+      <Section>
         <h2>Logged in as {session.session?.username}.</h2>
-      </div>
+      </Section>
       <OrderForm />
     </>
   );
@@ -38,13 +39,13 @@ const LoggedInView = () => {
 /** Displayed for non-authenticated users */
 const NoSessionView = () => {
   return (
-    <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 pb-10 my-10">
-      <h2 className="">You are not yet logged in</h2>
+    <Section>
+      <h2>You are not yet logged in</h2>
       <div className="flex gap-5">
         <button>Register</button>
         <button>Login</button>
       </div>
-    </div>
+    </Section>
   );
 };
 export default Main;

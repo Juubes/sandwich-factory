@@ -13,18 +13,18 @@ html {
 
 h1 {
   @apply text-white text-5xl font-bold;
-  @apply py-5;
+  @apply my-4;
 }
 
 h2 {
   @apply text-white text-4xl font-bold;
-  @apply py-4;
+  @apply mb-3;
 }
 
 p,
 li {
   @apply text-white text-3xl font-normal;
-  @apply py-2;
+  @apply my-2;
 }
 
 label {

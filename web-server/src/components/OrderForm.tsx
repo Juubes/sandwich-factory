@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
+import Section from "./Section";
 
 type OrderStatus = "default" | "sending order" | "order sent" | "order failed";
 type Sandwich = { id: number; name: string; breadType: string; toppings: [] };
@@ -103,19 +104,19 @@ function OrderForm() {
 
   return (
     <div>
-      <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 pb-10 my-10 shadow-lg">
+      <Section>
         <h2>Select a bread</h2>
 
-        <div className="flex gap-5">
+        <div className="flex gap-5 mt-5">
           {sandwiches.map((sandwich) => (
             <SandwichButton {...sandwich} />
           ))}
         </div>
-      </div>
+      </Section>
       {selectedSandwich && (
-        <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 pb-10 my-10 shadow-lg">
+        <Section>
           <WhatsInsideSection />
-        </div>
+        </Section>
       )}
     </div>
   );
