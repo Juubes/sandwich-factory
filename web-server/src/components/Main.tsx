@@ -3,6 +3,9 @@ import SessionContext, { useSession } from "../auth/AuthContext";
 import OrderForm from "./OrderForm";
 import Section from "./Section";
 
+export type OrderStatus = "default" | "sending order" | "order sent" | "order failed";
+export type Sandwich = { id: number; name: string; breadType: string; toppings: [] };
+
 function Main() {
   const session = useSession();
 

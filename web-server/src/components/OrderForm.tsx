@@ -1,45 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
+import WhatsInside from "../sections/WhatsInside";
+import { OrderStatus, Sandwich } from "./Main";
 import Section from "./Section";
-
-type OrderStatus = "default" | "sending order" | "order sent" | "order failed";
-type Sandwich = { id: number; name: string; breadType: string; toppings: [] };
 
 function OrderForm() {
   const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
   const [orderStatus, setOrderingStatus] = useState<OrderStatus>("default");
   const [error, setError] = useState<string>();
   const [selectedSandwich, setSelectedBread] = useState<number | null>();
-
-  function WhatsInsideSection() {
-    return (
-      <>
-        <div>
-          <h2>What's inside?</h2>
-
-          <ul>
-            {
-              // Toppings to list
-              sandwiches
-                .find((sandwich) => sandwich.id === selectedSandwich)
-                ?.toppings.map((topping) => (
-                  <li>{topping}</li>
-                ))
-            }
-          </ul>
-        </div>
-        <button
-          className="mt-5 w-full"
-          onClick={() => {
-            if (orderStatus === "default" && selectedSandwich)
-              orderSandwich(selectedSandwich);
-          }}
-        >
-          {getOrderButtonText(orderStatus)}
-        </button>
-      </>
-    );
-  }
 
   function orderSandwich(sandwichId: number) {
     setOrderingStatus("sending order");
@@ -113,25 +82,14 @@ function OrderForm() {
           ))}
         </div>
       </Section>
+
       {selectedSandwich && (
-        <Section>
-          <WhatsInsideSection />
-        </Section>
+        <WhatsInside
+          {...sandwiches.find((sandwich) => sandwich.id === selectedSandwich)}
+        />
       )}
     </div>
   );
 }
 
-function getOrderButtonText(orderStatus: OrderStatus) {
-  switch (orderStatus) {
-    case "default":
-      return "Order";
-    case "order failed":
-      return "Order failed (contact the maintainer or check console)";
-    case "order sent":
-      return "Order sent!";
-    case "sending order":
-      return "Sending...";
-  }
-}
 export default OrderForm;
