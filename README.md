@@ -8,19 +8,26 @@ This is a website and a service for ordering sandwiches. Everything has been doc
 
 starts all the services and opens up ports `3000` and `8001` for the web server and the API gateway.
 
+# TODO:
+
+- RabbitMQ integration
+- Login/register page
+- APIs for
+  - /order
+  - /sandwich
+- Sandwich-making service
+
 # Front-end
 
-The front-end architecture is made the following:
-
 - **React** for the framework
-- **NextJS** for compiling and optimisation
+- **NextJS** for compiling and optimization
 - **Tailwind** for styling
 
 # Architecture and services
 
 ## Static file serving
 
-The website is hosted on port 3000 on **NGINX** in a container.
+The website is hosted on port 3000 on **NGINX** in a container. Please use a CDN for a real project 😩
 
 ## API gateway
 
@@ -56,15 +63,15 @@ Clients can send orders to the Sandwich factory service trough the /order API ro
 
 # Known problems
 
-The API gateway is the bottleneck and a one-point-of-failure. Normally I'd trust this responsibility for a more robust platform but for the moment this will do.
-
 A lot of the microservices could have been replaced with serverless functions for more abstraction and efficiency.
 
 There's no SSL certificates for anything. The system works on localhost for testing purposes.
 
-The API endpoints are hardcoded.
+Most of the URL's are hardcoded.
 
-The localhost URL has been replaced with `local.gd`. It's a DNS service that maps to localhost.
+The localhost URL has been replaced with `*.local.gd`. It's a DNS service that maps to localhost.
+
+There's no data persistence; sessions, orders and all other data will be gone once the service is restarted.
 
 # About RabbitMQ
 
