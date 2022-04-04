@@ -6,10 +6,10 @@ function Main() {
   const session = useSession();
 
   return (
-    <main className="yellow">
+    <main className="yellow max-w-5xl mx-auto">
       <SessionContext>
         <div className="mx-auto max-w-7xl bg-[#CFA200] px-10 py-4 mt-10 shadow-lg">
-          <h1>Welcome to the SandwichFactory website</h1>
+          <h1>Welcome to SandwichFactory!</h1>
           <h2>How to make an order?</h2>
           <p>1. Login or register</p>
           <p>2. Create an order</p>

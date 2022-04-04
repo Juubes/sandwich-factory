@@ -8,7 +8,6 @@ services:
     build: "./api-gateway"
     ports:
       - 8001:8001
-
   order-api:
     build: "./order-api"
   sandwich-api:

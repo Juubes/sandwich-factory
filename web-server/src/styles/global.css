@@ -42,7 +42,8 @@ button {
   @apply p-3;
   @apply rounded-lg;
   @apply bg-blue-800;
-  @apply shadow-xl;
+  @apply shadow;
+  @apply hover:bg-blue-700;
 }
 
 li {

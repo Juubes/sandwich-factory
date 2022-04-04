@@ -19,6 +19,9 @@ const sessionContext = React.createContext<{
   updateSession: Function;
 }>({ session: null, updateSession: () => {} });
 
+/**
+ * A context to store the state of the user's authentication and session information.
+ */
 const SessionContext: FC = ({ children }) => {
   let [session, setSession] = React.useState(null);
 

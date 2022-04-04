@@ -1,11 +1,10 @@
 import * as React from "react";
+import { useState } from "react";
 
-function orderSandwich(id: number) {
-  console.log("ORdering " + id);
-}
+type OrderStatus = "default" | "sending order" | "order sent" | "order failed";
 
 function OrderForm() {
-  const [sandwiches, setSandwiches] = React.useState<
+  const [sandwiches, setSandwiches] = useState<
     {
       id: number;
       name: string;
@@ -13,9 +12,31 @@ function OrderForm() {
       toppings: [];
     }[]
   >([]);
+  const [orderStatus, setOrderingStatus] = useState<OrderStatus>("default");
+  const [error, setError] = useState<string>();
+  const [selectedSandwich, setSelectedBread] = useState<number>(1);
 
-  const [error, setError] = React.useState<string>();
-  const [selectedSandwich, setSelectedBread] = React.useState<number>(1);
+  function orderSandwich(sandwichId: number) {
+    setOrderingStatus("sending order");
+
+    fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "order", {
+      method: "POST",
+      body: JSON.stringify(sandwichId),
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setOrderingStatus("order sent");
+          return;
+        }
+
+        setOrderingStatus("order failed");
+        console.log("Ordering failed with status code: " + res.status)
+      })
+      .catch((ex) => {
+        setOrderingStatus("order failed");
+        console.log(ex);
+      });
+  }
 
   React.useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "sandwich")
@@ -40,9 +61,6 @@ function OrderForm() {
   if (sandwiches.length == 0) {
     return <p>Loading...</p>;
   }
-  console.log(
-    sandwiches.find((sandwich) => sandwich.id === selectedSandwich)?.toppings
-  );
 
   return (
     <div>
@@ -72,23 +90,38 @@ function OrderForm() {
         <h2>What's inside?</h2>
 
         <ul>
-          {sandwiches
-            .find((sandwich) => sandwich.id === selectedSandwich)
-            ?.toppings.map((topping) => (
-              <li>{topping}</li>
-            ))}
+          {
+            // Toppings to list
+            sandwiches
+              .find((sandwich) => sandwich.id === selectedSandwich)
+              ?.toppings.map((topping) => (
+                <li>{topping}</li>
+              ))
+          }
         </ul>
       </div>
       <button
-        className="mt-5"
+        className="mt-5 w-full"
         onClick={() => {
-          orderSandwich(selectedSandwich);
+          if (orderStatus === "default") orderSandwich(selectedSandwich);
         }}
       >
-        Order
+        {getOrderButtonText(orderStatus)}
       </button>
     </div>
   );
 }
 
+function getOrderButtonText(orderStatus: OrderStatus) {
+  switch (orderStatus) {
+    case "default":
+      return "Order";
+    case "order failed":
+      return "Order failed (contact the maintainer or check console)";
+    case "order sent":
+      return "Order sent!";
+    case "sending order":
+      return "Sending...";
+  }
+}
 export default OrderForm;
