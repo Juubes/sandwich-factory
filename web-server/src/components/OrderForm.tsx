@@ -1,36 +1,20 @@
 import * as React from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import WhatsInside from "../sections/WhatsInside";
-import { OrderStatus, Sandwich } from "./Main";
+import { setSelectedSandwich } from "../state/action-creators/actionCreators";
+import { State } from "../state/reducers";
+import { Sandwich } from "./Main";
 import Section from "./Section";
 
 function OrderForm() {
   const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
-  const [orderStatus, setOrderingStatus] = useState<OrderStatus>("default");
   const [error, setError] = useState<string>();
-  const [selectedSandwich, setSelectedBread] = useState<number | null>();
+  const dispatch = useDispatch();
 
-  function orderSandwich(sandwichId: number) {
-    setOrderingStatus("sending order");
-
-    fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "order", {
-      method: "POST",
-      body: JSON.stringify(sandwichId),
-    })
-      .then((res) => {
-        if (res.status == 200) {
-          setOrderingStatus("order sent");
-          return;
-        }
-
-        setOrderingStatus("order failed");
-        console.error("Ordering failed with status code: " + res.status);
-      })
-      .catch((ex) => {
-        setOrderingStatus("order failed");
-        console.log(ex);
-      });
-  }
+  const selectedSandwich = useSelector(
+    (state: State) => state.selectedSandwich
+  );
 
   React.useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "sandwich")
@@ -58,11 +42,13 @@ function OrderForm() {
 
   const SandwichButton = (sandwich: Sandwich) => {
     let color =
-      sandwich.id === selectedSandwich ? "bg-green-700 hover:bg-green-600" : "";
+      sandwich.id === selectedSandwich?.id
+        ? "bg-green-700 hover:bg-green-600"
+        : "";
     return (
       <button
         onClick={(e) => {
-          setSelectedBread(sandwich.id);
+          dispatch(setSelectedSandwich(sandwich));
         }}
         className={color}
       >
@@ -71,6 +57,7 @@ function OrderForm() {
     );
   };
 
+  console.log("Selected: " + selectedSandwich);
   return (
     <div>
       <Section>
@@ -78,16 +65,12 @@ function OrderForm() {
 
         <div className="flex gap-5 mt-5">
           {sandwiches.map((sandwich) => (
-            <SandwichButton {...sandwich} />
+            <SandwichButton key={sandwich.id} {...sandwich} />
           ))}
         </div>
       </Section>
 
-      {selectedSandwich && (
-        <WhatsInside
-          {...sandwiches.find((sandwich) => sandwich.id === selectedSandwich)}
-        />
-      )}
+      {selectedSandwich && <WhatsInside />}
     </div>
   );
 }
