@@ -31,7 +31,7 @@ const WhatsInside: FC = () => {
       })
       .catch((ex) => {
         updateOrderStatus("order failed");
-        console.log(ex);
+        console.error(ex);
       });
   }
 

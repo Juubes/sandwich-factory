@@ -15,18 +15,14 @@ app.get("/", (req, res) => {
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
 
-  console.log("Sent5")
   if (!username || !password) {
     res.sendStatus(400);
     return;
   }
 
-  console.log("Sent1");
   const token = auth.register(username, password);
   if (token) res.json({ token, username });
   else res.sendStatus(403);
-
-  console.log("Sent2");
 });
 
 app.post("/login", (req, res) => {
