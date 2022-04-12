@@ -13,7 +13,10 @@ const WhatsInside: FC = () => {
   );
 
   const dispatch = useDispatch();
-  const { updateOrderStatus } = bindActionCreators(actionCreators, dispatch);
+  const { updateOrderStatus, logout } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
 
   function orderSandwich(sandwichId: number) {
     updateOrderStatus("sending order");
@@ -30,6 +33,10 @@ const WhatsInside: FC = () => {
         if (res.status == 200) {
           updateOrderStatus("order sent");
           return;
+        }
+
+        if (res.status == 401) {
+          logout();
         }
 
         updateOrderStatus("order failed");
@@ -49,8 +56,8 @@ const WhatsInside: FC = () => {
       <button
         className="mt-5 w-full"
         onClick={() => {
-          // if (orderState === "default" && selectedSandwich)
-          orderSandwich(selectedSandwich!.id);
+          if (orderState === "default" && selectedSandwich)
+            orderSandwich(selectedSandwich.id);
         }}
       >
         {getOrderButtonText(orderState)}
