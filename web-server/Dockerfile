@@ -1,6 +1,7 @@
 FROM node as build
 WORKDIR /app
 COPY . .
+RUN yarn install
 RUN yarn build
 RUN npx next export
 
