@@ -21,7 +21,7 @@ type LogOutAction = {
 };
 export type SetSandWichAction = {
   type: ActionType.SetSandWichAction;
-  sandwich: Sandwich;
+  sandwich: Sandwich | null;
 };
 
 export type OrderStatusState =

@@ -41,8 +41,8 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  const username: string = req.get("UserID")!;
-  const success = auth.logout(username);
+  const username = req.headers.userid;
+  const success = auth.logout(username!.toString());
 
   if (success) res.sendStatus(200);
   else res.sendStatus(500);

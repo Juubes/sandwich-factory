@@ -25,7 +25,7 @@ export const logout = () => {
   };
 };
 
-export const setSelectedSandwich = (sandwich: Sandwich) => {
+export const setSelectedSandwich = (sandwich: Sandwich | null) => {
   return (dispatch: Dispatch<SetSandWichAction>) => {
     dispatch({ type: ActionType.SetSandWichAction, sandwich });
   };
