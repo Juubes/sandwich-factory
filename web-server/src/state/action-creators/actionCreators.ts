@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { Sandwich } from "../../components/Main";
+import { Sandwich } from "../../sections/Main";
 import ActionType, {
   OrderAction,
   OrderStatusState,
@@ -24,6 +24,7 @@ export const logout = () => {
     dispatch({ type: ActionType.Logout });
   };
 };
+
 export const setSelectedSandwich = (sandwich: Sandwich) => {
   return (dispatch: Dispatch<SetSandWichAction>) => {
     dispatch({ type: ActionType.SetSandWichAction, sandwich });

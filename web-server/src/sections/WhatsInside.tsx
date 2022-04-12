@@ -1,22 +1,20 @@
+import { bindActionCreators } from "@reduxjs/toolkit";
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Sandwich } from "../components/Main";
 import Section from "../components/Section";
-import { updateOrderStatus } from "../state/action-creators/actionCreators";
+import * as actionCreators from "../state/action-creators/actionCreators";
 import { OrderStatusState } from "../state/actions/ActionTypes";
 import { State } from "../state/reducers";
+import ToppingsListing from "./ToppingsList";
 
 const WhatsInside: FC = () => {
   const { selectedSandwich, orderState } = useSelector((state: State) => state);
 
   const dispatch = useDispatch();
-
-  const setOrderingStatus = (newState: OrderStatusState) => {
-    dispatch(updateOrderStatus(newState));
-  };
+  const { updateOrderStatus } = bindActionCreators(actionCreators, dispatch);
 
   function orderSandwich(sandwichId: number) {
-    setOrderingStatus("sending order");
+    updateOrderStatus("sending order");
 
     fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "order", {
       method: "POST",
@@ -24,15 +22,15 @@ const WhatsInside: FC = () => {
     })
       .then((res) => {
         if (res.status == 200) {
-          setOrderingStatus("order sent");
+          updateOrderStatus("order sent");
           return;
         }
 
-        setOrderingStatus("order failed");
+        updateOrderStatus("order failed");
         console.error("Ordering failed with status code: " + res.status);
       })
       .catch((ex) => {
-        setOrderingStatus("order failed");
+        updateOrderStatus("order failed");
         console.log(ex);
       });
   }
@@ -40,7 +38,9 @@ const WhatsInside: FC = () => {
   return (
     <Section>
       <h2>What's inside?</h2>
+
       <ToppingsListing {...selectedSandwich!} />
+
       <button
         className="mt-5 w-full"
         onClick={() => {
@@ -53,6 +53,7 @@ const WhatsInside: FC = () => {
     </Section>
   );
 };
+
 function getOrderButtonText(orderStatus: OrderStatusState) {
   switch (orderStatus) {
     case "default":
@@ -65,11 +66,5 @@ function getOrderButtonText(orderStatus: OrderStatusState) {
       return "Sending...";
   }
 }
-const ToppingsListing = (sandwich: Sandwich) => (
-  <ul>
-    {sandwich.toppings.map((topping, i) => (
-      <li key={i}>{topping}</li>
-    ))}
-  </ul>
-);
+
 export default WhatsInside;

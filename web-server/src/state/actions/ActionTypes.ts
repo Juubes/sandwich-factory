@@ -1,4 +1,4 @@
-import { Sandwich } from "../../components/Main";
+import { Sandwich } from "../../sections/Main";
 
 enum ActionType {
   // Sessions

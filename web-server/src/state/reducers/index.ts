@@ -1,5 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { Sandwich } from "../../components/Main";
+import { Sandwich } from "../../sections/Main";
 import ActionType, {
   OrderAction,
   OrderStatusState,

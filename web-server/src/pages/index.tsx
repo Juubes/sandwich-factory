@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Provider } from "react-redux";
-import Main from "../components/Main";
+import Main from "../sections/Main";
 import { store } from "../state/redux-store";
 
 export default function Index() {

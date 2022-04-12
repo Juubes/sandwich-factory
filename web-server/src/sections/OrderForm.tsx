@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import WhatsInside from "../sections/WhatsInside";
+import WhatsInside from "./WhatsInside";
 import { setSelectedSandwich } from "../state/action-creators/actionCreators";
 import { State } from "../state/reducers";
 import { Sandwich } from "./Main";
-import Section from "./Section";
+import Section from "../components/Section";
 
 function OrderForm() {
   const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
@@ -57,7 +57,6 @@ function OrderForm() {
     );
   };
 
-  console.log("Selected: " + selectedSandwich);
   return (
     <div>
       <Section>

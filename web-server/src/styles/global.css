@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+
 html {
   font-family: "Merriweather";
   font-family: "Modak", cursive;
@@ -13,12 +14,12 @@ html {
 
 h1 {
   @apply text-white text-5xl font-bold;
-  @apply my-4;
+  @apply mt-4 mb-6;
 }
 
 h2 {
   @apply text-white text-4xl font-bold;
-  @apply mb-3;
+  @apply mt-3 mb-4;
 }
 
 p,
@@ -48,4 +49,10 @@ button {
 
 li {
   @apply list-disc list-inside text-white font-bold;
+}
+
+input {
+  @apply text-white text-3xl font-normal;
+  @apply bg-blue-700  rounded-lg;
+  @apply p-3;
 }

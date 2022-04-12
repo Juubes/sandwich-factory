@@ -1,14 +1,10 @@
 import express from "express";
 import * as auth from "./auth";
-import multer from "multer";
 
 const app = express();
 
-// Middleware
-app.use(multer().none());
-
 // Bodyparsers for JSON
-app.use("/checkSession", express.json());
+app.use("*", express.json());
 
 // Mapped from /user on proxy
 app.get("/", (req, res) => {
@@ -19,14 +15,18 @@ app.get("/", (req, res) => {
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
 
+  console.log("Sent5")
   if (!username || !password) {
     res.sendStatus(400);
     return;
   }
 
+  console.log("Sent1");
   const token = auth.register(username, password);
-  if (token) res.json({ token: token });
+  if (token) res.json({ token, username });
   else res.sendStatus(403);
+
+  console.log("Sent2");
 });
 
 app.post("/login", (req, res) => {
@@ -40,7 +40,7 @@ app.post("/login", (req, res) => {
   const token = auth.login(username, password);
 
   if (token) {
-    res.json({ token });
+    res.json({ token, username });
   } else res.sendStatus(403);
 });
 

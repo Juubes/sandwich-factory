@@ -9,6 +9,8 @@ const app = express();
 const PORT = 8001;
 
 const PUBLIC_ROUTES = [
+  { method: "OPTIONS", pathMatch: "" },
+
   // Check if API is online
   { method: "GET", pathMatch: "^$|^/$" },
 
@@ -54,11 +56,18 @@ const sandwichAPI = proxy.createProxyServer({
   target: "http://sandwich-api:7452",
 });
 
+// Parse cookies
 app.use(cookies());
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log(req.body);
+  next();
+});
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  // res.setHeader("Content-Security-Policy", "connect-src default-src")
+  res.setHeader("Access-Control-Allow-Headers", "*");
   next();
 });
 
@@ -132,18 +141,25 @@ app.get("/", (req, res) => {
   res.json({ status: "OK", code: "200" });
 });
 
+// Lazy options
+app.options("*", (req, res) => {
+  res.setHeader("Allow", "*")
+  res.sendStatus(200);
+});
+
 activateProxy(app, "/user/*", authAPI);
 activateProxy(app, "/order/*", orderAPI);
 activateProxy(app, "/sandwich/*", sandwichAPI);
 
-let test = proxy.createServer({ ws: true });
-
 // The catch-all
+// Only catches unimplemented routes not passed to proxies
 app.all("*", (req, res) => {
   res.sendStatus(501);
   console.error("User requested for a known route and failed!");
   console.error("Failed: " + req.method + " " + req.url);
 });
+
+let test = proxy.createServer({ ws: true });
 
 let httpServer = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

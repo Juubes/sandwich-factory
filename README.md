@@ -22,6 +22,7 @@ starts all the services and opens up ports `3000` and `8001` for the web server 
 - **React** for the framework
 - **NextJS** for compiling and optimization
 - **Tailwind** for styling
+- **Redux** for global state management
 
 # Architecture and services
 
