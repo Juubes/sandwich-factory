@@ -214,18 +214,18 @@
     redux "^4.0.0"
 
 "@types/react@*":
-  version "18.0.2"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.2.tgz#bc6a0572d434642ebe8b4ac0f121d18e2f2d8f7f"
-  integrity sha512-2poV9ReTwwV5ZNxkKyk7t6Vp/odeTfYI3vRjtDYWfUdEstx9mp26jzELfMBwV6gXg1irhHUnmZJH/dJW7xafcA==
+  version "17.0.44"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.44.tgz#c3714bd34dd551ab20b8015d9d0dbec812a51ec7"
+  integrity sha512-Ye0nlw09GeMp2Suh8qoOv0odfgCoowfM/9MG6WeRD60Gq9wS90bdkdRtYbRkNhXOpG4H+YXGvj4wOWhAC0LJ1g==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^17.0":
-  version "17.0.44"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.44.tgz#c3714bd34dd551ab20b8015d9d0dbec812a51ec7"
-  integrity sha512-Ye0nlw09GeMp2Suh8qoOv0odfgCoowfM/9MG6WeRD60Gq9wS90bdkdRtYbRkNhXOpG4H+YXGvj4wOWhAC0LJ1g==
+"@types/react@17.0.38":
+  version "17.0.38"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.38.tgz#f24249fefd89357d5fa71f739a686b8d7c7202bd"
+  integrity sha512-SI92X1IA+FMnP3qM5m4QReluXzhcmovhZnLNm3pyeQlooi02qI7sLiepEYqT678uNiyc25XfCqxREFpy3W7YhQ==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1771,11 +1771,6 @@ react-redux@^7.2.8:
     loose-envify "^1.4.0"
     prop-types "^15.7.2"
     react-is "^17.0.2"
-
-react-thunk@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-thunk/-/react-thunk-1.0.0.tgz#79813d47f31147e81aee841ed5e76a9e3eabc8b1"
-  integrity sha1-eYE9R/MRR+ga7oQe1edqnj6ryLE=
 
 react@17.0:
   version "17.0.2"

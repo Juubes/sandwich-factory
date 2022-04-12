@@ -4,19 +4,23 @@ services:
     build: "./web-server"
     ports:
       - 3000:80
+
   api-gateway:
     build: "./api-gateway"
     ports:
       - 8001:8001
+
   order-api:
     build: "./order-api"
+
   sandwich-api:
     build: "./sandwich-api"
+
   auth-api:
     build: "./auth-api"
+
   sandwich-service:
     build: "./sandwich-service"
 
-  # rabbitmq:
-    # image: rabbitmq
-
+  rabbitmq:
+    image: rabbitmq

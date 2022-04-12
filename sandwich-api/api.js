@@ -2,8 +2,6 @@ const express = require("express");
 
 const app = express();
 
-const rabbitMQURL = "http://127.0.0.1:5672/";
-
 // Mapped from /sandwich on proxy
 app.get("/", (req, res) => {
   res.json([
