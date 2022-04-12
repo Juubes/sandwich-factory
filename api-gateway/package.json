@@ -20,7 +20,6 @@
     "@types/axios": "^0.14.0",
     "@types/cookie-parser": "^1.4.2",
     "axios": "^0.26.1",
-    "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
     "http-proxy": "^1.18.1",
     "node-http-proxy": "^0.2.4",

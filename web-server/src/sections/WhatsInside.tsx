@@ -8,7 +8,9 @@ import { State } from "../state/reducers";
 import ToppingsListing from "./ToppingsList";
 
 const WhatsInside: FC = () => {
-  const { selectedSandwich, orderState } = useSelector((state: State) => state);
+  const { selectedSandwich, orderState, session } = useSelector(
+    (state: State) => state
+  );
 
   const dispatch = useDispatch();
   const { updateOrderStatus } = bindActionCreators(actionCreators, dispatch);
@@ -18,7 +20,8 @@ const WhatsInside: FC = () => {
 
     fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "order", {
       method: "POST",
-      body: JSON.stringify(sandwichId),
+      body: sandwichId.toString(),
+      headers: { Authorization: session!.sessionToken },
     })
       .then((res) => {
         if (res.status == 200) {
@@ -27,7 +30,6 @@ const WhatsInside: FC = () => {
         }
 
         updateOrderStatus("order failed");
-        console.error("Ordering failed with status code: " + res.status);
       })
       .catch((ex) => {
         updateOrderStatus("order failed");
@@ -44,8 +46,8 @@ const WhatsInside: FC = () => {
       <button
         className="mt-5 w-full"
         onClick={() => {
-          if (orderState === "default" && selectedSandwich)
-            orderSandwich(selectedSandwich.id);
+          // if (orderState === "default" && selectedSandwich)
+          orderSandwich(selectedSandwich!.id);
         }}
       >
         {getOrderButtonText(orderState)}

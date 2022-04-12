@@ -11,10 +11,7 @@ function OrderForm() {
   const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
   const [error, setError] = useState<string>();
   const dispatch = useDispatch();
-
-  const selectedSandwich = useSelector(
-    (state: State) => state.selectedSandwich
-  );
+  const { selectedSandwich } = useSelector((state: State) => state);
 
   React.useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "sandwich")

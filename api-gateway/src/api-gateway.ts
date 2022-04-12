@@ -1,7 +1,6 @@
 import express from "express";
 import axios from "axios";
 import proxy from "http-proxy";
-import cookies from "cookie-parser";
 import { activateProxy } from "./utils";
 import ws from "ws";
 
@@ -56,9 +55,6 @@ const sandwichAPI = proxy.createProxyServer({
   target: "http://sandwich-api:7452",
 });
 
-// Parse cookies
-app.use(cookies());
-
 app.use((req, res, next) => {
   next();
 });
@@ -106,7 +102,8 @@ app.use(async (req, res, next) => {
   }
 
   // Check auth
-  const token = req.cookies.token;
+  const token = req.headers.authorization;
+
   if (!token) {
     res.sendStatus(403);
     return;
@@ -131,7 +128,8 @@ app.use(async (req, res, next) => {
   if (!username) {
     res.sendStatus(401);
   } else {
-    console.log("User from cookie identified: " + username);
+    // The services below don't need this
+    req.headers.authorization = "";
     next();
   }
   return;
@@ -144,8 +142,7 @@ app.get("/", (req, res) => {
 
 // Lazy options
 app.options("*", (req, res) => {
-  res.send("OK");
-  console.log("Sent OK for options")
+  res.sendStatus(200);
 });
 
 activateProxy(app, "/user/*", authAPI);

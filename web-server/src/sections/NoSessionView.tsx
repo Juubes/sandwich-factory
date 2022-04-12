@@ -108,7 +108,6 @@ const RegisterForm = () => {
       const data = await res.json();
 
       dispatch(updateSessionState(data.token, data.username));
-      console.log("Registered: " + data.token);
     } catch (ex) {
       setError("Error on register: " + ex);
     }
