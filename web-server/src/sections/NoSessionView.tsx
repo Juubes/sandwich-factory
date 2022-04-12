@@ -5,11 +5,6 @@ import { updateSessionState } from "../state/action-creators/actionCreators";
 
 type AuthenticatingState = "no action" | "registering" | "logging in";
 
-const errorContext = createContext<{
-  error: string | null;
-  setError: Function;
-}>({ error: null, setError: () => {} });
-
 /** Displayed for non-authenticated users */
 const NoSessionView = () => {
   const [state, setState] = useState<AuthenticatingState>("no action");
@@ -18,20 +13,39 @@ const NoSessionView = () => {
   let SelectedForm = state === "registering" ? RegisterForm : LoginForm;
 
   return (
-    <errorContext.Provider value={{ error, setError }}>
+    <>
       {state === "no action" && (
         <Section>
           <h2>You are not yet logged in</h2>
           <div className="flex gap-5">
-            <button onClick={() => setState("registering")}>Register</button>
-            <button onClick={() => setState("logging in")}>Login</button>
+            <button
+              onClick={() => {
+                setState("registering");
+              }}
+            >
+              Register
+            </button>
+            <button
+              onClick={() => {
+                setState("logging in");
+              }}
+            >
+              Login
+            </button>
           </div>
         </Section>
       )}
       {state !== "no action" && (
-        <SelectedForm closeHook={() => setState("no action")} />
+        <errorContext.Provider value={{ error, setError }}>
+          <SelectedForm
+            closeHook={() => {
+              setState("no action");
+              setError(null);
+            }}
+          />
+        </errorContext.Provider>
       )}
-    </errorContext.Provider>
+    </>
   );
 };
 
@@ -45,6 +59,12 @@ type GenericFormProps = {
   submit: Function;
   submitBtnText: string;
 };
+
+const errorContext = createContext<{
+  error: string | null;
+  setError: Function;
+}>({ error: null, setError: () => {} });
+
 const GenericForm: FC<GenericFormProps> = ({ submit, submitBtnText }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -73,7 +93,6 @@ const GenericForm: FC<GenericFormProps> = ({ submit, submitBtnText }) => {
       />
 
       <Error />
-
       <button
         className="mt-6"
         onClick={(e) => {
@@ -102,8 +121,8 @@ const RegisterForm: FC<{ closeHook: Function }> = ({ closeHook }) => {
         }
       );
 
-      if (res.status != 200) {
-        setError("Error on register: " + res.status);
+      if (res.status === 403) {
+        setError("Account already registered! Login instead.");
         return;
       }
 
