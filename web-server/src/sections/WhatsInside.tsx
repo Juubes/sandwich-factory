@@ -20,8 +20,11 @@ const WhatsInside: FC = () => {
 
     fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "order", {
       method: "POST",
-      body: sandwichId.toString(),
-      headers: { Authorization: session!.sessionToken },
+      body: JSON.stringify({ sandwichId }),
+      headers: {
+        Authorization: session!.sessionToken,
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
         if (res.status == 200) {

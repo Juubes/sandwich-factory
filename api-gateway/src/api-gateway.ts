@@ -130,6 +130,8 @@ app.use(async (req, res, next) => {
   } else {
     // The services below don't need this
     req.headers.authorization = "";
+
+    req.headers.userid = username;
     next();
   }
   return;

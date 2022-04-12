@@ -12,10 +12,14 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   const { sandwichId } = req.body;
-
-  console.log(`Added sandwich with an id ${sandwichId} to the queue.`);
+  const username = req.headers.userid;
 
   // TODO: Add to rabbitmq
+
+
+
+
+  console.log(`Added sandwich ${username}:${sandwichId} to the queue.`);
 
   res.sendStatus(200);
 });
