@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
-const Section: FC = ({ children }) => {
+const Section: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <div className="mx-auto max-w-7xl bg-[#CFA200] p-6 my-10 shadow-lg">
+    <section className="mx-auto max-w-7xl bg-[#CFA200] p-6 my-10 shadow-lg">
       {children}
-    </div>
+    </section>
   );
 };
 
