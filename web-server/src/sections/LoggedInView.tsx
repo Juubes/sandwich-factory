@@ -45,7 +45,6 @@ const LoggedInView = () => {
           Logout
         </button>
       </Section>
-      <OrderForm />
     </>
   );
 };
