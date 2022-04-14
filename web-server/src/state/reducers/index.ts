@@ -18,10 +18,10 @@ const orderStatusReducer = (
       return state;
   }
 };
-type SessionState = { username: string; sessionToken: string } | null;
+type SessionState = { username: string; sessionToken: string };
 
 const sessionStateReducer = (
-  state: SessionState = null,
+  state: SessionState | null = null,
   action: SessionAction
 ) => {
   switch (action.type) {

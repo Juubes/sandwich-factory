@@ -14,8 +14,11 @@ export default function Index() {
             content="This is a website for ordering sandwiches."
           />
         </Head>
+
         <header></header>
+
         <Main />
+
         <footer></footer>
       </Provider>
     </div>

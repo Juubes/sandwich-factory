@@ -41,9 +41,8 @@ select {
 button {
   @apply text-white text-3xl font-normal;
   @apply p-3;
-  @apply rounded-lg;
+  @apply rounded-lg shadow;
   @apply bg-blue-800;
-  @apply shadow;
   @apply hover:bg-blue-700;
 }
 

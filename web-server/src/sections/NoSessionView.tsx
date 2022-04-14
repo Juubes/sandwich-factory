@@ -93,6 +93,7 @@ const GenericForm: FC<GenericFormProps> = ({ submit, submitBtnText }) => {
       />
 
       <Error />
+
       <button
         className="mt-6"
         onClick={(e) => {
