@@ -1,5 +1,5 @@
 FROM node as build
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN npm ci
 ENTRYPOINT ["npm", "start"]

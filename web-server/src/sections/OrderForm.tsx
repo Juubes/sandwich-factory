@@ -1,16 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import SandwichButton from "../components/SandwichButton";
 import Section from "../components/Section";
-import { State } from "../state/reducers";
 import { Sandwich } from "./Main";
-import WhatsInside from "./WhatsInside";
 
 function OrderForm() {
   const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
   const [error, setError] = useState<string>();
-  const { selectedSandwich } = useSelector((state: State) => state);
 
   React.useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_GATEWAY_URL + "sandwich")

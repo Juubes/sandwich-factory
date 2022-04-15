@@ -1,4 +1,4 @@
 FROM node as build
 COPY . .
-RUN npm install
+RUN yarn install --frozen-lockfile
 ENTRYPOINT ["npm", "start"]

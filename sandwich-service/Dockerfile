@@ -1,5 +1,5 @@
 FROM node as build
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN yarn install --frozen-lockfile
 ENTRYPOINT ["npm", "start"]
