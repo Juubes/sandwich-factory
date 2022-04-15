@@ -36,6 +36,9 @@ const USER_ROUTES = [
   // Get own orders
   { method: "GET", pathMatch: "^/order/$" },
 
+  // Event source for sandwiches
+  { method: "GET", pathMatch: "^/order/receive/$" },
+
   // Create order
   { method: "POST", pathMatch: "^/order/$" },
 ];
@@ -68,6 +71,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Authorization checks. Good requests return.
 app.use(async (req, res, next) => {
   // Normalize URL
@@ -77,7 +81,6 @@ app.use(async (req, res, next) => {
 
   console.log("INFO: " + req.method + " for " + req.url);
 
-  // If the route is found, continue
   if (
     PUBLIC_ROUTES.some((route) => {
       if (route.method !== req.method) return false;
@@ -85,6 +88,7 @@ app.use(async (req, res, next) => {
       return true;
     })
   ) {
+    // If the route is found, continue
     return next();
   }
 
@@ -106,6 +110,7 @@ app.use(async (req, res, next) => {
 
   if (!token) {
     res.sendStatus(403);
+    console.log("Request blocked for " + req.method + " " + req.url);
     return;
   }
 
