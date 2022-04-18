@@ -5,7 +5,7 @@ import RegisterForm from "../components/RegisterForm";
 import Section from "../components/Section";
 import {
   AuthContextProvider,
-  useAuthErrorContext,
+  useAuthErrorContext
 } from "../contexts/AuthErrorContext";
 import { updateSessionState } from "../state/action-creators/actionCreators";
 import { State } from "../state/reducers";

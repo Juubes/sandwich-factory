@@ -58,15 +58,15 @@ app.post("/", (req, res) => {
 app.get("/receive", (req, res) => {
   const username = new String(req.headers.userid).valueOf();
 
-  // Send own orders back
-  const ownOrders = activeOrders.filter((order) => {
-    return order.username === username;
-  });
-
   const stream = new SseStream(req);
   stream.pipe(res);
 
   const sendStatus = () => {
+    // Send own orders back
+    const ownOrders = activeOrders.filter((order) => {
+      return order.username === username;
+    });
+
     console.log("Sending status");
 
     stream.writeMessage({
@@ -104,6 +104,10 @@ app.get("/receive", (req, res) => {
   sendStatus();
 
   // Send status when order is done.
+  const ownOrders = activeOrders.filter((order) => {
+    return order.username === username;
+  });
+
   ownOrders.forEach((order: Order) => {
     order.listeners.push(sendStatus);
   });

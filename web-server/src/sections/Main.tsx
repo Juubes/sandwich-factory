@@ -1,12 +1,10 @@
 import { useSelector } from "react-redux";
+import { State } from "../state/reducers";
+import CurrentOrdersView from "./CurrentOrdersView";
 import LoggedInView from "./LoggedInView";
 import NoSessionView from "./NoSessionView";
-import { State } from "../state/reducers";
-import SandwichMenu from "./SandwichMenu";
 import WhatsInside from "./OrderView";
-import EventSource from "eventsource";
-import { useEffect } from "react";
-import CurrentOrdersView from "./CurrentOrdersView";
+import SandwichMenu from "./SandwichMenu";
 
 export type Sandwich = {
   id: number;
