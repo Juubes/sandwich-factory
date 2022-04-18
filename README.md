@@ -8,15 +8,6 @@ This is a website and a service for ordering sandwiches. Everything has been doc
 
 starts all the services and opens up ports `3000` and `8001` for the web server and the API gateway.
 
-# TODO:
-
-- RabbitMQ integration
-- Login/register page
-- APIs for
-  - /order
-  - /sandwich
-- Sandwich-making service
-
 # Front-end
 
 - **React** for the framework
@@ -46,7 +37,7 @@ Registers and logs users in. The API gateway handles session persistence.
 
 ## Database
 
-Stores client data, orders, sandwiches and all other data from the services. Every service has access to only to its own data. The database is implemented with MongoDB.
+The original plan was to implement saving authentication credentials and other data to MongoDB. Right now everything is volatile and disappears on a restart.
 
 # How does the system work?
 
@@ -58,11 +49,11 @@ Clients can either authenticate, browser all sandwiches or make an order. All of
 
 Clients can authenticate with the authentication API. The system handles session at the reverse-proxy. The microservices don't do their own authentication.
 
-The authentication is done on the proxy and the usernames passed on headers to backend. There's probably a more elegant solution to this.
+The authentication is done on the proxy and the usernames passed on HTTP headers to the backend. There's probably a more elegant solution to this.
 
 ## Ordering
 
-Clients can send orders to the Sandwich factory service trough the /order API route. The client gets an immediate response that the order has started processing. The client and the sandwich factory share a websocket so the client gets a push notification when the sandwich is ready.
+Clients can send orders to the Sandwich factory service trough the /order API route. The client gets an immediate response that the order has started processing. The client keeps a socket connected and get's an update immediately when the sandwich is ready. This is implemented with **event-stream** and **EventSource**.
 
 # Known problems
 
@@ -79,3 +70,13 @@ There's no data persistence; sessions, orders and all other data will be gone on
 # About RabbitMQ
 
 RabbitMQ is needed only for the queueing the orders. Piping everything trough it would be overhead -- especially since most of the services can be assumed to scale with the usage. Other APIs don't need the queue function before the service; they are assumed to always have enough capacity.
+
+# Honorable mentions
+
+Here are listed all the headaches that took more than four hours to completely solve. The good thing is next time it's only going to take two hours:
+- CORS
+- EventSource implementation
+- Setting up redux
+- SSL with localhost and other networking
+- Did I mention CORS?
+- Also CORS
