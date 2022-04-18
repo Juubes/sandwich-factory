@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import Main from "../sections/Main";
 import { store } from "../state/redux-store";

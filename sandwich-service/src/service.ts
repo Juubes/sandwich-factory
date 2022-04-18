@@ -30,14 +30,14 @@ const reconnect = async (): Promise<Connection> => {
   await channel.assertQueue(TODO_QUEUE);
 
   channel.consume(TODO_QUEUE, (msg) => {
-    const { username, sandwichId } = JSON.parse(msg!.content.toString());
+    const { id, username, sandwichId } = JSON.parse(msg!.content.toString());
 
     console.log(`Order arrived for ${username}:${sandwichId}! Processing...`);
     channel.ack(msg!);
 
     setTimeout(() => {
-      console.log(`Order processed for ${username}:${sandwichId}!`);
-      const data = { username, sandwichId };
+      console.log(`Order processed for ${id}!`);
+      const data = { id, username, sandwichId };
       channel.sendToQueue(DONE_QUEUE, Buffer.from(JSON.stringify(data)), {
         persistent: true,
       });

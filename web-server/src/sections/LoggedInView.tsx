@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import OrderForm from "./OrderForm";
+import SandwichMenu from "./SandwichMenu";
 import Section from "../components/Section";
 import { State } from "../state/reducers";
 import {
@@ -7,13 +7,14 @@ import {
   setSelectedSandwich,
   updateOrderStatus,
 } from "../state/action-creators/actionCreators";
+import { useEffect } from "react";
 
 /** Displayed for authenticated users */
 const LoggedInView = () => {
   const session = useSelector((state: State) => state.session);
   const { username, sessionToken } = session!;
-
   const dispatch = useDispatch();
+
   return (
     <>
       <Section>
@@ -27,19 +28,12 @@ const LoggedInView = () => {
                 Authorization: sessionToken,
                 "Content-Type": "application/json",
               },
-            })
-              .then(async (response) => {
-                if (response.status === 200) {
-                  dispatch(logout());
-                  dispatch(setSelectedSandwich(null));
-                  dispatch(updateOrderStatus("default"));
-                  return;
-                }
-              })
-              .catch((ex) => {
-                dispatch(logout());
-                console.error(ex);
-              });
+            }).catch((ex) => {
+              console.error(ex);
+            });
+            dispatch(logout());
+            dispatch(setSelectedSandwich(null));
+            dispatch(updateOrderStatus("default"));
           }}
         >
           Logout

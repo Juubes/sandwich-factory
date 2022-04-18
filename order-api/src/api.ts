@@ -1,65 +1,25 @@
-import { Connection } from "amqplib";
-
 import express from "express";
-import amqplib from "amqplib";
+import { queueSandwich } from "./utils";
+import SseStream from "ssestream";
 
 const app = express();
 
-const rabbitMQURL = "amqp://rabbitmq:5672/";
-
-const TODO_QUEUE = "sandwiches-todo";
-const DONE_QUEUE = "sandwiches-done";
-
-type Order = { username: string; sandwich: number };
-let queueSandwich = (username: string, sandwich: Order) => {
-  return false;
+export type Order = {
+  id: number;
+  username: string;
+  sandwich: number;
+  listeners: Function[];
 };
 
-const reconnect = async (): Promise<Connection> => {
-  try {
-    const connection = await amqplib.connect(rabbitMQURL);
-    console.log("OrderAPI connected to RabbitMQ!");
-
-    return connection;
-  } catch (ex) {
-    console.log("OrderAPI connection to RabbitMQ failed. Reconnecting in 3s.");
-    return await new Promise((resolve) =>
-      setTimeout(() => resolve(reconnect()), 3000)
-    );
-  }
-};
-
-// Configure RabbitMQ
-(async () => {
-  const connection = await reconnect();
-
-  const channel = await connection.createChannel();
-
-  await channel.assertQueue(DONE_QUEUE);
-
-  channel.consume(DONE_QUEUE, (msg) => {
-    console.log("Ready sandwich: " + msg!.content.toString());
-    channel.ack(msg!);
-  });
-
-  // Replace the function when ready
-  queueSandwich = (username: string, sandwichId: Order) => {
-    const data = { username, sandwichId };
-    console.log("Sending " + username + " sandwichId");
-
-    return channel.sendToQueue(TODO_QUEUE, Buffer.from(JSON.stringify(data)), {
-      persistent: true,
-    });
-  };
-})();
+export const activeOrders: Order[] = [];
 
 // Bodyparser
 app.use(express.json());
 
 // Mapped from /order on proxy
 app.get("/", (req, res) => {
-  // TODO: own orders
-  res.sendStatus(501);
+  const username = new String(req.headers.userid).valueOf();
+  res.json(activeOrders.filter((order) => order.username === username));
 });
 
 app.post("/", (req, res) => {
@@ -71,14 +31,80 @@ app.post("/", (req, res) => {
     return;
   }
 
-  if (!queueSandwich(username, sandwichId)) {
+  const id = Math.random();
+  if (!queueSandwich(id, username, sandwichId)) {
     console.log("Queuing failed for order " + username + ":" + sandwichId);
     res.sendStatus(500);
     return;
   }
 
+  activeOrders.push({ id, username, sandwich: sandwichId, listeners: [] });
   console.log(`Added sandwich ${username}:${sandwichId} to the queue.`);
   res.sendStatus(200);
+});
+
+app.get("/receive", (req, res) => {
+  const username = new String(req.headers.userid).valueOf();
+  const sseStream = new SseStream(req);
+  sseStream.pipe(res);
+
+  // Send own orders back
+  console.log(username);
+
+  const ownOrders = activeOrders.filter((order) => {
+    return order.username === username;
+  });
+
+  console.log("Own orders: " + ownOrders.length);
+
+  sseStream.writeMessage({
+    event: "status",
+    data: ownOrders.map((order) => {
+      order.id, order.sandwich, order.username;
+    }),
+  });
+  sseStream.writeMessage({
+    event: "message",
+    data: ownOrders.map((order) => {
+      order.id, order.sandwich, order.username;
+    }),
+  });
+  // sseStream.write({
+  //   event: "status",
+  //   data: ownOrders.map((order) => {
+  //     order.id, order.sandwich, order.username;
+  //   }),
+  // });
+  console.log("Status sent: " + ownOrders);
+
+  if (ownOrders.length === 0) {
+    console.log("No orders");
+    res.end();
+    return;
+  }
+
+  // Send ready order when done.
+  ownOrders.forEach((order: Order) => {
+    order.listeners.push(() => {
+      // sseStream.writeMessage(
+      //   {
+      //        },
+      //   "utf-8"
+      // );
+      sseStream.emit(
+        "data",
+        Buffer.from(
+          JSON.stringify({ event: "ready", sandwich: order.sandwich })
+        )
+      );
+      console.log("Sent sandwich back");
+    });
+  });
+
+  res.on("close", () => {
+    sseStream.unpipe(res);
+    res.end();
+  });
 });
 
 app.listen(3531, () => {

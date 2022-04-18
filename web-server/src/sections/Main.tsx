@@ -2,8 +2,10 @@ import { useSelector } from "react-redux";
 import LoggedInView from "./LoggedInView";
 import NoSessionView from "./NoSessionView";
 import { State } from "../state/reducers";
-import OrderForm from "./OrderForm";
-import WhatsInside from "./WhatsInside";
+import SandwichMenu from "./SandwichMenu";
+import WhatsInside from "./OrderView";
+import EventSource from "eventsource";
+import { useEffect } from "react";
 
 export type Sandwich = {
   id: number;
@@ -20,7 +22,7 @@ function Main() {
   // Build sections
   if (session) {
     sections.push(<LoggedInView key="liw" />);
-    sections.push(<OrderForm key="of" />);
+    sections.push(<SandwichMenu key="of" />);
 
     if (selectedSandwich) sections.push(<WhatsInside key="wi" />);
   } else {

@@ -1,9 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { Sandwich } from "../../sections/Main";
 import ActionType, {
+  Order,
   OrderAction,
   OrderStatusState,
   SessionAction,
+  SetCurrentOrdersAction,
   SetSandWichAction,
 } from "../actions/ActionTypes";
 
@@ -33,7 +35,11 @@ const sessionStateReducer = (
       return state;
   }
 };
-
+const setOrdersStatusReducer = (
+  orders: Order[] = [],
+) => {
+  return orders;
+};
 const selectedSandwichReducer = (
   sandwich: Sandwich | null = null,
   action: SetSandWichAction
@@ -50,6 +56,7 @@ const allReducers = combineReducers({
   selectedSandwich: selectedSandwichReducer,
   session: sessionStateReducer,
   orderState: orderStatusReducer,
+  setOrdersStatus: setOrdersStatusReducer,
 });
 
 export type State = ReturnType<typeof allReducers>;

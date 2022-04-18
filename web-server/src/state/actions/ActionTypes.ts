@@ -7,10 +7,23 @@ enum ActionType {
 
   // Order
   UpdateOrderStatusAction,
+  SetCurrentOrdersAction,
 
   // Sandwich
   SetSandWichAction,
 }
+export type Order = { id: number; sandwich: number; state: OrderPrepareState };
+
+enum OrderPrepareState {
+  READY,
+  COOKING,
+}
+
+export type SetCurrentOrdersAction = {
+  type: ActionType.SetCurrentOrdersAction;
+  orders: Order[];
+};
+
 type UpdateSessionAction = {
   type: ActionType.UpdateSession;
   username: string;

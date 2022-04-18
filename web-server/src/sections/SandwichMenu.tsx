@@ -4,7 +4,7 @@ import SandwichButton from "../components/SandwichButton";
 import Section from "../components/Section";
 import { Sandwich } from "./Main";
 
-function OrderForm() {
+function SandwichMenu() {
   const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
   const [error, setError] = useState<string>();
 
@@ -45,4 +45,4 @@ function OrderForm() {
   );
 }
 
-export default OrderForm;
+export default SandwichMenu;

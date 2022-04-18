@@ -459,6 +459,11 @@ setprototypeof@1.2.0:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
+ssestream@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ssestream/-/ssestream-1.1.0.tgz#f46d046ede4797ca00e2e1b88964021cfbe7d678"
+  integrity sha512-UOS3JTuGqGEOH89mfHFwVOJNH2+JX9ebIWuw6WBQXpkVOxbdoY3RMliSHzshL4XVYJJrcul5NkuvDFCzgYu1Lw==
+
 "statuses@>= 1.5.0 < 2", statuses@~1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"

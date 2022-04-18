@@ -71,7 +71,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Authorization checks. Good requests return.
 app.use(async (req, res, next) => {
   // Normalize URL
@@ -129,9 +128,10 @@ app.use(async (req, res, next) => {
     return;
   }
 
-  // Wrong password
+  // Wrong auth token
   if (!username) {
     res.sendStatus(401);
+    console.log("User had an invalid auth token: " + token);
   } else {
     // The services below don't need this
     req.headers.authorization = "";

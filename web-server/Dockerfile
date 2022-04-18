@@ -1,6 +1,6 @@
 FROM node as build
 WORKDIR /app
-COPY . .
+COPY . . 
 RUN yarn install --frozen-lockfile
 RUN yarn build
 RUN npx next export
