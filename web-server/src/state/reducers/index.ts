@@ -35,9 +35,7 @@ const sessionStateReducer = (
       return state;
   }
 };
-const setOrdersStatusReducer = (
-  orders: Order[] = [],
-) => {
+const setCurrentOrdersReducer = (orders: Order[] = []): Order[] => {
   return orders;
 };
 const selectedSandwichReducer = (
@@ -56,7 +54,7 @@ const allReducers = combineReducers({
   selectedSandwich: selectedSandwichReducer,
   session: sessionStateReducer,
   orderState: orderStatusReducer,
-  setOrdersStatus: setOrdersStatusReducer,
+  setCurrentOrders: setCurrentOrdersReducer,
 });
 
 export type State = ReturnType<typeof allReducers>;

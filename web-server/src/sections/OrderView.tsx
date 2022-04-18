@@ -2,9 +2,10 @@ import { bindActionCreators } from "@reduxjs/toolkit";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { OrderPrepareState } from "../components/OrderPrepareState";
 import Section from "../components/Section";
 import * as actionCreators from "../state/action-creators/actionCreators";
-import { OrderStatusState } from "../state/actions/ActionTypes";
+import { Order, OrderStatusState } from "../state/actions/ActionTypes";
 import { State } from "../state/reducers";
 import ToppingsListing from "./ToppingsList";
 
@@ -34,17 +35,29 @@ const WhatsInside: FC = () => {
     );
 
     es.onopen = (e) => {
-      console.log("Reconnected");
+      console.log("Connected to event source!");
     };
 
-    es.addEventListener("status", (e) => {
-      console.log("Status!");
-    });
+    es.onmessage = (e) => {
+      console.log("Status update!");
+      const data = JSON.parse(e.data);
 
-    es.addEventListener("ready", (e) => {
-      console.log("Ready!");
-      es.close();
-    });
+      console.log("Data: " + JSON.stringify(data));
+
+      const orders: Order[] = data["orders"];
+
+      console.log("orders: " + orders);
+
+      setCurrentOrders(orders);
+
+      // Close if all orders ready
+      if (
+        orders.every((order: Order) => order.state === OrderPrepareState.READY)
+      ) {
+        es.close();
+        console.log("Closed!");
+      }
+    };
   };
 
   function orderSandwich(sandwichId: number) {

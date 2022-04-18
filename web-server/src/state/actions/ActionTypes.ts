@@ -1,3 +1,4 @@
+import { OrderPrepareState } from "../../components/OrderPrepareState";
 import { Sandwich } from "../../sections/Main";
 
 enum ActionType {
@@ -13,11 +14,6 @@ enum ActionType {
   SetSandWichAction,
 }
 export type Order = { id: number; sandwich: number; state: OrderPrepareState };
-
-enum OrderPrepareState {
-  READY,
-  COOKING,
-}
 
 export type SetCurrentOrdersAction = {
   type: ActionType.SetCurrentOrdersAction;

@@ -1,5 +1,5 @@
 import amqplib from "amqplib";
-import { activeOrders, Order } from "./api";
+import { activeOrders, Order, OrderState } from "./api";
 
 const rabbitMQURL = "amqp://rabbitmq:5672/";
 
@@ -37,16 +37,13 @@ export const reconnectRabbitMQ = async (): Promise<amqplib.Connection> => {
     // Send sandwich order back
 
     const order = activeOrders.find((order) => order.id === readyOrder.id);
-    console.log(
-      "Found order when searching! " + order?.username + order?.sandwich
-    );
-    if (!order?.id) {
+    if (!order || !order.id) {
       channel.ack(msg!);
       console.log("Acknoledged an invalid message.");
       return;
     }
-    order!.listeners.forEach((listener) => listener());
-    console.log("Activated " + order!.listeners.length + " listeners");
+    order.state = OrderState.READY;
+    order.listeners.forEach((listener) => listener());
 
     channel.ack(msg!);
   });

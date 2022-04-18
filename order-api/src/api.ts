@@ -1,14 +1,20 @@
 import express from "express";
-import { queueSandwich } from "./utils";
 import SseStream from "ssestream";
+import { queueSandwich } from "./utils";
 
 const app = express();
+
+export enum OrderState {
+  READY,
+  COOKING,
+}
 
 export type Order = {
   id: number;
   username: string;
   sandwich: number;
   listeners: Function[];
+  state: OrderState;
 };
 
 export const activeOrders: Order[] = [];
@@ -31,79 +37,73 @@ app.post("/", (req, res) => {
     return;
   }
 
-  const id = Math.random();
+  const id = Math.floor(Math.random() * 1e10);
   if (!queueSandwich(id, username, sandwichId)) {
     console.log("Queuing failed for order " + username + ":" + sandwichId);
     res.sendStatus(500);
     return;
   }
 
-  activeOrders.push({ id, username, sandwich: sandwichId, listeners: [] });
+  activeOrders.push({
+    id,
+    username,
+    sandwich: sandwichId,
+    listeners: [],
+    state: OrderState.COOKING,
+  });
   console.log(`Added sandwich ${username}:${sandwichId} to the queue.`);
   res.sendStatus(200);
 });
 
 app.get("/receive", (req, res) => {
   const username = new String(req.headers.userid).valueOf();
-  const sseStream = new SseStream(req);
-  sseStream.pipe(res);
 
   // Send own orders back
-  console.log(username);
-
   const ownOrders = activeOrders.filter((order) => {
     return order.username === username;
   });
 
-  console.log("Own orders: " + ownOrders.length);
+  const stream = new SseStream(req);
+  stream.pipe(res);
 
-  sseStream.writeMessage({
-    event: "status",
-    data: ownOrders.map((order) => {
-      order.id, order.sandwich, order.username;
-    }),
-  });
-  sseStream.writeMessage({
-    event: "message",
-    data: ownOrders.map((order) => {
-      order.id, order.sandwich, order.username;
-    }),
-  });
-  // sseStream.write({
-  //   event: "status",
-  //   data: ownOrders.map((order) => {
-  //     order.id, order.sandwich, order.username;
-  //   }),
-  // });
-  console.log("Status sent: " + ownOrders);
+  const sendStatus = () => {
+    console.log("Sending status");
 
-  if (ownOrders.length === 0) {
-    console.log("No orders");
-    res.end();
-    return;
-  }
-
-  // Send ready order when done.
-  ownOrders.forEach((order: Order) => {
-    order.listeners.push(() => {
-      // sseStream.writeMessage(
-      //   {
-      //        },
-      //   "utf-8"
-      // );
-      sseStream.emit(
-        "data",
-        Buffer.from(
-          JSON.stringify({ event: "ready", sandwich: order.sandwich })
-        )
-      );
-      console.log("Sent sandwich back");
+    stream.writeMessage({
+      data: {
+        type: "status",
+        orders: ownOrders.map((order) => {
+          return {
+            id: order.id,
+            sandwich: order.sandwich,
+            state: order.state,
+          };
+        }),
+      },
     });
-  });
 
-  res.on("close", () => {
-    sseStream.unpipe(res);
+    // Drop connection if no more orders
+    if (ownOrders.some((order) => order.state !== OrderState.READY)) return;
+
+    console.log("End stream");
+
+    stream.unpipe(res);
     res.end();
+    clearInterval(interval);
+
+    // Clear listeners
+    ownOrders.forEach((order) => (order.listeners = []));
+  };
+
+  // Keep-alive every 10s
+  const interval = setInterval(sendStatus, 1000);
+
+  // Send status on connection
+  sendStatus();
+
+  // Send status when order is done.
+  ownOrders.forEach((order: Order) => {
+    order.listeners.push(sendStatus);
   });
 });
 
