@@ -1,11 +1,16 @@
 import * as React from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SandwichButton from "../components/SandwichButton";
 import Section from "../components/Section";
+import { setSandwichMenu } from "../state/action-creators/actionCreators";
+import { State } from "../state/reducers";
 import { Sandwich } from "./Main";
 
 function SandwichMenu() {
-  const [sandwiches, setSandwiches] = useState<Sandwich[]>([]);
+  const menu = useSelector((state: State) => state.sandwichMenu);
+  const dispatch = useDispatch();
+
   const [error, setError] = useState<string>();
 
   React.useEffect(() => {
@@ -16,8 +21,8 @@ function SandwichMenu() {
           return;
         }
 
-        let data = await response.json();
-        setSandwiches(data);
+        let data: Sandwich[] = await response.json();
+        dispatch(setSandwichMenu(data));
       })
       .catch((ex) => {
         console.error(ex);
@@ -28,7 +33,7 @@ function SandwichMenu() {
   if (error) {
     return <p className="text-red-500 italic text-xl">{error}</p>;
   }
-  if (sandwiches.length == 0) {
+  if (menu.length == 0) {
     return <p>Loading...</p>;
   }
 
@@ -37,7 +42,7 @@ function SandwichMenu() {
       <h2>Select a bread</h2>
 
       <div className="flex gap-5 mt-5">
-        {sandwiches.map((sandwich) => (
+        {menu.map((sandwich) => (
           <SandwichButton key={sandwich.id} {...sandwich} />
         ))}
       </div>

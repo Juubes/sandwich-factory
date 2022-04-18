@@ -11,6 +11,7 @@
     "@types/event-source-polyfill": "^1.0.0",
     "@types/eventsource": "^1.1.8",
     "@types/web-push": "^3.3.2",
+    "clsx": "^1.1.1",
     "event-source-polyfill": "^1.0.26",
     "eventsource": "^2.0.0",
     "next": "^12.1.1",

@@ -6,6 +6,7 @@ import SandwichMenu from "./SandwichMenu";
 import WhatsInside from "./OrderView";
 import EventSource from "eventsource";
 import { useEffect } from "react";
+import CurrentOrdersView from "./CurrentOrdersView";
 
 export type Sandwich = {
   id: number;
@@ -15,7 +16,9 @@ export type Sandwich = {
 };
 
 function Main() {
-  const { session, selectedSandwich } = useSelector((state: State) => state);
+  const { session, selectedSandwich, orderStatusList } = useSelector(
+    (state: State) => state
+  );
 
   const sections = [];
 
@@ -25,6 +28,10 @@ function Main() {
     sections.push(<SandwichMenu key="of" />);
 
     if (selectedSandwich) sections.push(<WhatsInside key="wi" />);
+
+    if (orderStatusList) {
+      sections.push(<CurrentOrdersView key={"cov"} />);
+    }
   } else {
     sections.push(<NoSessionView key="nsw" />);
   }
@@ -40,6 +47,7 @@ function Main() {
         <p>2. Create an order</p>
         <p>3. Wait for your sandwich.</p>
         <p>{"4. You will get a notification when it's ready!"}</p>
+        <h2 className="pt-5">Orders take 20 seconds to prepare.</h2>
       </div>
 
       {sections}

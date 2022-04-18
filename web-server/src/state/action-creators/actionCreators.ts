@@ -1,4 +1,5 @@
 import { Dispatch } from "react";
+import { useDispatch } from "react-redux";
 import { Sandwich } from "../../sections/Main";
 import ActionType, {
   Order,
@@ -7,6 +8,7 @@ import ActionType, {
   SessionAction,
   SetCurrentOrdersAction,
   SetSandWichAction,
+  SetSandwichMenuAction,
 } from "../actions/ActionTypes";
 
 export const updateSessionState = (sessionToken: string, username: string) => {
@@ -42,5 +44,10 @@ export const setSelectedSandwich = (sandwich: Sandwich | null) => {
 export const setCurrentOrders = (orders: Order[]) => {
   return (dispatch: Dispatch<SetCurrentOrdersAction>) => {
     dispatch({ type: ActionType.SetCurrentOrdersAction, orders });
+  };
+};
+export const setSandwichMenu = (sandwiches: Sandwich[]) => {
+  return (dispatch: Dispatch<SetSandwichMenuAction>) => {
+    dispatch({ type: ActionType.SetSandwichMenuAction, sandwiches });
   };
 };

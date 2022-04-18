@@ -72,13 +72,15 @@ app.get("/receive", (req, res) => {
     stream.writeMessage({
       data: {
         type: "status",
-        orders: ownOrders.map((order) => {
-          return {
-            id: order.id,
-            sandwich: order.sandwich,
-            state: order.state,
-          };
-        }),
+        orders: ownOrders
+          .map((order) => {
+            return {
+              id: order.id,
+              sandwich: order.sandwich,
+              state: order.state,
+            };
+          })
+          .reverse(),
       },
     });
 

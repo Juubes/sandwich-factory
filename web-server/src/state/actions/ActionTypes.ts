@@ -12,6 +12,7 @@ enum ActionType {
 
   // Sandwich
   SetSandWichAction,
+  SetSandwichMenuAction,
 }
 export type Order = { id: number; sandwich: number; state: OrderPrepareState };
 
@@ -19,7 +20,10 @@ export type SetCurrentOrdersAction = {
   type: ActionType.SetCurrentOrdersAction;
   orders: Order[];
 };
-
+export type SetSandwichMenuAction = {
+  type: ActionType.SetSandwichMenuAction;
+  sandwiches: Sandwich[];
+};
 type UpdateSessionAction = {
   type: ActionType.UpdateSession;
   username: string;

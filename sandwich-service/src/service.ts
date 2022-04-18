@@ -41,6 +41,6 @@ const reconnect = async (): Promise<Connection> => {
       channel.sendToQueue(DONE_QUEUE, Buffer.from(JSON.stringify(data)), {
         persistent: true,
       });
-    }, 3000);
+    }, 20000);
   });
 })();

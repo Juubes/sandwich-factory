@@ -21,7 +21,7 @@ const WhatsInside: FC = () => {
 
   useEffect(() => {
     if (orderState !== "default") updateOrderStatus("default");
-  }, []);
+  }, [selectedSandwich]);
 
   const waitForResponse = () => {
     const es = new EventSourcePolyfill(
@@ -39,14 +39,9 @@ const WhatsInside: FC = () => {
     };
 
     es.onmessage = (e) => {
-      console.log("Status update!");
       const data = JSON.parse(e.data);
 
-      console.log("Data: " + JSON.stringify(data));
-
       const orders: Order[] = data["orders"];
-
-      console.log("orders: " + orders);
 
       setCurrentOrders(orders);
 

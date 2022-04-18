@@ -5,11 +5,12 @@ import ActionType, {
   OrderAction,
   OrderStatusState,
   SessionAction,
-  SetCurrentOrdersAction,
+  SetCurrentOrdersAction as OrderStatusListAction,
   SetSandWichAction,
+  SetSandwichMenuAction,
 } from "../actions/ActionTypes";
 
-const orderStatusReducer = (
+const orderStateReducer = (
   state: OrderStatusState = "default",
   action: OrderAction
 ) => {
@@ -35,9 +36,20 @@ const sessionStateReducer = (
       return state;
   }
 };
-const setCurrentOrdersReducer = (orders: Order[] = []): Order[] => {
-  return orders;
+const orderStatusListReducer = (
+  orders: Order[] = [],
+  action: OrderStatusListAction
+) => {
+  return action.orders ?? orders;
 };
+
+const sandwichMenuReducer = (
+  sandwiches: Sandwich[] = [],
+  action: SetSandwichMenuAction
+) => {
+  return action.sandwiches ?? sandwiches;
+};
+
 const selectedSandwichReducer = (
   sandwich: Sandwich | null = null,
   action: SetSandWichAction
@@ -53,8 +65,9 @@ const selectedSandwichReducer = (
 const allReducers = combineReducers({
   selectedSandwich: selectedSandwichReducer,
   session: sessionStateReducer,
-  orderState: orderStatusReducer,
-  setCurrentOrders: setCurrentOrdersReducer,
+  orderState: orderStateReducer,
+  orderStatusList: orderStatusListReducer,
+  sandwichMenu: sandwichMenuReducer,
 });
 
 export type State = ReturnType<typeof allReducers>;
