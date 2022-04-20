@@ -1,16 +1,17 @@
-import amqplib from "amqplib";
-import { activeOrders, Order, OrderState } from "./api";
+import amqplib, { Channel, Connection, Message } from "amqplib";
+import { activeOrders, Order, OrderState } from "./order-api";
 
 const rabbitMQURL = "amqp://rabbitmq:5672/";
-
-export let queueSandwich = (id: number, username: string, sandwich: Order) => {
-  return false;
-};
 
 const TODO_QUEUE = "sandwiches-todo";
 const DONE_QUEUE = "sandwiches-done";
 
-export const reconnectRabbitMQ = async (): Promise<amqplib.Connection> => {
+let channel: Channel;
+
+/**
+ * Recurrent function that tries to reconnect every 3 seconds until succeeds.
+ */
+const reconnectRabbitMQ = async (): Promise<Connection> => {
   try {
     const connection = await amqplib.connect(rabbitMQURL);
     console.log("OrderAPI connected to RabbitMQ!");
@@ -23,37 +24,46 @@ export const reconnectRabbitMQ = async (): Promise<amqplib.Connection> => {
     );
   }
 };
+
+const onMessageCallback = (msg: Message | null) => {
+  if (!msg) return;
+
+  const readyOrder: Order = JSON.parse(msg.content.toString());
+
+  // Send sandwich order back
+  const order = activeOrders.find((order) => order.id === readyOrder.id);
+  if (!order || !order.id) {
+    channel.ack(msg);
+    console.log("Acknoledged an invalid message.");
+    return;
+  }
+  order.state = OrderState.READY;
+  order.listeners.forEach((listener) => listener());
+
+  channel.ack(msg);
+};
+
 // Configure RabbitMQ
-(async () => {
+export const configureRabbitMQ = async () => {
   const connection = await reconnectRabbitMQ();
 
-  const channel = await connection.createChannel();
+  channel = await connection.createChannel();
 
   await channel.assertQueue(DONE_QUEUE);
 
-  channel.consume(DONE_QUEUE, (msg) => {
-    const readyOrder: Order = JSON.parse(msg!.content.toString());
+  channel.consume(DONE_QUEUE, onMessageCallback);
+};
 
-    // Send sandwich order back
+export const queueSandwich = (
+  id: number,
+  username: string,
+  sandwichId: Order
+) => {
+  const data = { id, username, sandwichId };
 
-    const order = activeOrders.find((order) => order.id === readyOrder.id);
-    if (!order || !order.id) {
-      channel.ack(msg!);
-      console.log("Acknoledged an invalid message.");
-      return;
-    }
-    order.state = OrderState.READY;
-    order.listeners.forEach((listener) => listener());
+  if (!channel) return false;
 
-    channel.ack(msg!);
+  return channel.sendToQueue(TODO_QUEUE, Buffer.from(JSON.stringify(data)), {
+    persistent: true,
   });
-
-  // Replace the function when ready
-  queueSandwich = (id: number, username: string, sandwichId: Order) => {
-    const data = { id, username, sandwichId };
-
-    return channel.sendToQueue(TODO_QUEUE, Buffer.from(JSON.stringify(data)), {
-      persistent: true,
-    });
-  };
-})();
+};

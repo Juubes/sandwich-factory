@@ -1,6 +1,6 @@
 import express from "express";
 import SseStream from "ssestream";
-import { queueSandwich } from "./utils";
+import { configureRabbitMQ, queueSandwich } from "./utils";
 
 const app = express();
 
@@ -18,6 +18,10 @@ export type Order = {
 };
 
 export const activeOrders: Order[] = [];
+
+(async () => {
+  await configureRabbitMQ();
+})();
 
 // Bodyparser
 app.use(express.json());
@@ -51,6 +55,7 @@ app.post("/", (req, res) => {
     listeners: [],
     state: OrderState.COOKING,
   });
+
   console.log(`Added sandwich ${username}:${sandwichId} to the queue.`);
   res.sendStatus(200);
 });
@@ -63,9 +68,9 @@ app.get("/receive", (req, res) => {
 
   const sendStatus = () => {
     // Send own orders back
-    const ownOrders = activeOrders.filter((order) => {
-      return order.username === username;
-    });
+    const ownOrders = activeOrders.filter(
+      (order) => order.username === username
+    );
 
     console.log("Sending status");
 
@@ -87,8 +92,6 @@ app.get("/receive", (req, res) => {
     // Drop connection if no more orders
     if (ownOrders.some((order) => order.state !== OrderState.READY)) return;
 
-    console.log("End stream");
-
     stream.unpipe(res);
     res.end();
     clearInterval(interval);
@@ -104,10 +107,9 @@ app.get("/receive", (req, res) => {
   sendStatus();
 
   // Send status when order is done.
-  const ownOrders = activeOrders.filter((order) => {
-    return order.username === username;
-  });
+  const ownOrders = activeOrders.filter((order) => order.username === username);
 
+  // Set up a listener for when order is ready
   ownOrders.forEach((order: Order) => {
     order.listeners.push(sendStatus);
   });
