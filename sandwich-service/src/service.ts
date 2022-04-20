@@ -1,4 +1,3 @@
-// TODO: No REST, only RabbitMQ
 import amqplib, { Connection } from "amqplib";
 
 const rabbitMQURL = "amqp://rabbitmq:5672/";
@@ -24,16 +23,15 @@ const reconnect = async (): Promise<Connection> => {
 
 (async () => {
   const connection = await reconnect();
-
   const channel = await connection.createChannel();
-
   await channel.assertQueue(TODO_QUEUE);
 
   channel.consume(TODO_QUEUE, (msg) => {
-    const { id, username, sandwichId } = JSON.parse(msg!.content.toString());
+    if (!msg) return;
 
-    console.log(`Order arrived for ${username}:${sandwichId}! Processing...`);
-    channel.ack(msg!);
+    const { id, username, sandwichId } = JSON.parse(msg.content.toString());
+
+    console.log(`Order arrived for id ${id}! Processing...`);
 
     setTimeout(() => {
       console.log(`Order processed for ${id}!`);
@@ -42,5 +40,7 @@ const reconnect = async (): Promise<Connection> => {
         persistent: true,
       });
     }, 20000);
+
+    channel.ack(msg);
   });
 })();
