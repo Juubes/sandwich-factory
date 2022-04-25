@@ -21,6 +21,11 @@ export const activeOrders: Order[] = [];
 
 (async () => {
   await configureRabbitMQ();
+
+  // Only listen after service is ready
+  app.listen(3531, () => {
+    console.log("Order API started on port 3531.");
+  });
 })();
 
 // Bodyparser
@@ -66,13 +71,14 @@ app.get("/receive", (req, res) => {
   const stream = new SseStream(req);
   stream.pipe(res);
 
+  const streamId = Math.floor(Math.random() * 1e6).toString(16);
+  console.log("Opened an eventstream (ID: " + streamId + ") for a client");
+
   const sendStatus = () => {
     // Send own orders back
     const ownOrders = activeOrders.filter(
       (order) => order.username === username
     );
-
-    console.log("Sending status");
 
     stream.writeMessage({
       data: {
@@ -95,6 +101,7 @@ app.get("/receive", (req, res) => {
     stream.unpipe(res);
     res.end();
     clearInterval(interval);
+    console.log("Eventstream closed (ID: " + streamId + ")");
 
     // Clear listeners
     ownOrders.forEach((order) => (order.listeners = []));
@@ -113,8 +120,4 @@ app.get("/receive", (req, res) => {
   ownOrders.forEach((order: Order) => {
     order.listeners.push(sendStatus);
   });
-});
-
-app.listen(3531, () => {
-  console.log("Order API started on port 3531.");
 });
