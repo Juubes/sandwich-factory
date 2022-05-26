@@ -15,6 +15,9 @@ starts all the services and opens up ports `3000` and `8001` for the web server 
 - **Tailwind** for styling
 - **Redux** for global state management
 
+![](./resources/web-ui.png)
+
+
 # Architecture and services
 
 ![](./resources/architecture.png)
@@ -66,6 +69,8 @@ Most of the URL's are hardcoded.
 The localhost URL has been replaced with `*.local.gd`. It's a DNS service that maps to localhost.
 
 There's no data persistence; sessions, orders and all other data will be gone once the service is restarted.
+
+There's no volume based cache sharing on local development. Testing changes is slower than it could be.
 
 # About RabbitMQ
 
