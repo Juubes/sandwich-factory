@@ -62,7 +62,7 @@ Clients can send orders to the Sandwich factory service trough the /order API ro
 
 A lot of the microservices could have been replaced with serverless functions for more abstraction and efficiency.
 
-There's no SSL certificates for anything. The system works on localhost for testing purposes.
+There's no SSL certificates for anything. The system works on localhost for a proof of concept.
 
 Most of the URL's are hardcoded.
 
@@ -70,7 +70,7 @@ The localhost URL has been replaced with `*.local.gd`. It's a DNS service that m
 
 There's no data persistence; sessions, orders and all other data will be gone once the service is restarted.
 
-There's no volume based cache sharing on local development. Testing changes is slower than it could be.
+There's no volume based cache sharing on local development. Testing changes is not as fast as it could be.
 
 # About RabbitMQ
 
