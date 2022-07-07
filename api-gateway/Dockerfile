@@ -4,3 +4,4 @@ COPY . .
 RUN npm ci
 RUN npx tsc
 ENTRYPOINT [ "npm" , "start" ]
+EXPOSE 8001

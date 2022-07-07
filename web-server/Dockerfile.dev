@@ -3,22 +3,17 @@ FROM node:18
 USER node
 WORKDIR /app
 
-VOLUME [ "src", "src"]
-
-# Caching
-VOLUME [ ${yarn_cache} ]
-VOLUME [ "node_modules" ]
-VOLUME [ ".next" ]
-
-COPY package.json yarn.lock ./
-
 ARG yarn_cache=/usr/local/share/.cache/yarn/v6
 ENV YARN_CACHE_DIR=${yarn_cache}
+
+COPY package.json yarn.lock ./
 
 # Install packages
 RUN yarn install --frozen-lockfile --non-interactive
 
 COPY . .
+
+EXPOSE 3000
 
 # Build files
 ENTRYPOINT yarn dev

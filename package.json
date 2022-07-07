@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "workspaces": [
+    "web-server",
+    "sandwich-api",
+    "order-api",
+    "sandwich-service",
+    "auth-api",
+    "api-gateway"
+  ],
+  "packageManager": "yarn@3.2.1"
+}

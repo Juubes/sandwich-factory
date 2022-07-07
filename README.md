@@ -13,8 +13,6 @@ before
 
 starts all the services and opens up ports `3000` and `8001` for the web server and the API gateway.
 
-
-
 # Front-end
 
 - **React** for the framework
