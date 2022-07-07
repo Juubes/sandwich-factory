@@ -11,7 +11,11 @@
 		}
 	},
 	"features": {
-		"docker-from-docker": "latest",
-		"git": "latest"
+		"docker-in-docker": "latest",
+		"git": "os-provided"
+	},
+	"remoteEnv": {
+		// Production has its own file
+		"COMPOSE_FILE": "./docker-compose-dev.yml"
 	}
 }
