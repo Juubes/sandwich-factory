@@ -4,9 +4,16 @@ This is a website and a service for ordering sandwiches. Everything has been doc
 
 ## Running
 
+If you want to run the services in development mode, set the environment variable
+> COMPOSE_FILE=docker-compose-dev.yml
+
+before
+
 > docker-compose up
 
 starts all the services and opens up ports `3000` and `8001` for the web server and the API gateway.
+
+
 
 # Front-end
 

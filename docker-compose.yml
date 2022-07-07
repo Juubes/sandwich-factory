@@ -1,26 +1,39 @@
 version: "3.3"
+
 services:
   web-server:
     build: "./web-server"
     ports:
       - 3000:80
+    environment:
+      - NODE_ENV=production
 
   api-gateway:
     build: "./api-gateway"
     ports:
       - 8001:8001
+    environment:
+      - NODE_ENV=production
 
   order-api:
     build: "./order-api"
+    environment:
+      - NODE_ENV=production
 
   sandwich-api:
     build: "./sandwich-api"
+    environment:
+      - NODE_ENV=production
 
   auth-api:
     build: "./auth-api"
+    environment:
+      - NODE_ENV=production
 
   sandwich-service:
     build: "./sandwich-service"
+    environment:
+      - NODE_ENV=production
 
   rabbitmq:
     image: rabbitmq

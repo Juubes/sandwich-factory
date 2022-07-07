@@ -1,26 +1,39 @@
 version: "3.3"
 services:
   web-server:
-    build: "./web-server"
+    build:
+      context: ./web-server
+      dockerfile: Dockerfile.dev
+    environment:
+      - NODE_ENV=development
     ports:
       - 3000:80
 
   api-gateway:
-    build: "./api-gateway"
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
     ports:
       - 8001:8001
 
-  order-api:
-    build: "./order-api"
+  order-api:   
+    build:
+      context: ./order-api
+      dockerfile: Dockerfile
 
   sandwich-api:
-    build: "./sandwich-api"
-
+    build:
+      context: ./sandwich-api
+      dockerfile: Dockerfile
   auth-api:
-    build: "./auth-api"
+    build:
+      context: ./auth-api
+      dockerfile: Dockerfile
 
   sandwich-service:
-    build: "./sandwich-service"
+    build:
+      context: ./sandwich-service
+      dockerfile: Dockerfile
 
   rabbitmq:
     image: rabbitmq
